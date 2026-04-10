@@ -127,11 +127,12 @@
       font-weight: 700 !important;
       padding: 10px 24px !important;
       border-radius: 999px !important;
-      transition: box-shadow 0.5s ease-out, background 0.5s ease-out !important;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease !important;
       box-shadow: 0 4px 20px rgba(212,168,83,0.3);
     }
 
     .nav-cta:hover {
+      transform: translateY(-1px) !important;
       box-shadow: 0 6px 28px rgba(212,168,83,0.45) !important;
       background: var(--gold-light) !important;
     }
@@ -262,15 +263,15 @@
       border-radius: 999px;
       font-size: 0.9rem; font-weight: 700;
       cursor: pointer;
-      transition: box-shadow 0.5s ease-out, background 0.5s ease-out;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
       text-decoration: none;
       display: inline-block;
       box-shadow: 0 4px 24px rgba(212,168,83,0.3);
       font-family: 'Outfit', sans-serif;
       letter-spacing: 0.02em;
-      will-change: transform;
     }
     .btn-gold:hover {
+      transform: translateY(-2px);
       box-shadow: 0 8px 32px rgba(212,168,83,0.45);
       background: var(--gold-light);
     }
@@ -283,13 +284,13 @@
       border-radius: 999px;
       font-size: 0.9rem; font-weight: 500;
       cursor: pointer;
-      transition: border-color 0.5s ease-out, color 0.5s ease-out, background 0.5s ease-out;
+      transition: transform 0.25s ease, border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
       text-decoration: none;
       display: inline-block;
       font-family: 'Outfit', sans-serif;
-      will-change: transform;
     }
     .btn-outline:hover {
+      transform: translateY(-2px);
       border-color: var(--gold);
       color: var(--gold);
       background: rgba(212,168,83,0.06);
@@ -411,7 +412,7 @@
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       overflow: hidden;
-      transition: border-color 0.5s ease-out, box-shadow 0.5s ease-out;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
       will-change: transform, opacity;
     }
 
@@ -437,6 +438,7 @@
     }
 
     .feature-card:hover {
+      transform: scale(1.02);
       border-color: rgba(212,168,83,0.3);
       box-shadow: 0 16px 48px rgba(0,0,0,0.3);
     }
@@ -482,11 +484,12 @@
       border-radius: 16px;
       padding: 28px 24px;
       display: flex; gap: 16px;
-      transition: border-color 0.5s ease-out, background 0.5s ease-out;
+      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
       will-change: transform, opacity;
     }
 
     .menu-card:hover {
+      transform: scale(1.02);
       border-color: rgba(212,168,83,0.25);
       background: rgba(212,168,83,0.04);
     }
@@ -715,11 +718,12 @@
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 28px;
-      transition: border-color 0.5s ease-out;
+      transition: transform 0.25s ease, border-color 0.25s ease;
       will-change: transform, opacity;
     }
 
     .review-card:hover {
+      transform: scale(1.02);
       border-color: rgba(212,168,83,0.3);
     }
 
@@ -867,19 +871,42 @@
     }
     .footer-socials svg { width: 16px; height: 16px; }
 
-    /* ─── SCROLL FADE (initial state — Motion.dev handles animation) ─── */
+    /* ─── SCROLL REVEAL ─── */
     .fade-in {
       opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity;
     }
     .fade-in.visible {
       opacity: 1;
-      transform: none;
+      transform: translateY(0);
     }
 
-    /* Hero entrance states */
-    .hero-content { opacity: 0; }
-    .hero-visual { opacity: 0; }
-    .hero-content.animated, .hero-visual.animated { opacity: 1; }
+    /* ─── STAGGER DELAYS ─── */
+    .stagger > *:nth-child(1) { transition-delay: 0ms; }
+    .stagger > *:nth-child(2) { transition-delay: 80ms; }
+    .stagger > *:nth-child(3) { transition-delay: 160ms; }
+    .stagger > *:nth-child(4) { transition-delay: 240ms; }
+    .stagger > *:nth-child(5) { transition-delay: 320ms; }
+    .stagger > *:nth-child(6) { transition-delay: 400ms; }
+
+    /* ─── HERO ENTRANCE (CSS animation, no JS) ─── */
+    @keyframes heroFadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .hero-content {
+      opacity: 0;
+      animation: heroFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+      will-change: transform, opacity;
+    }
+    .hero-visual {
+      opacity: 0;
+      animation: heroFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+      will-change: transform, opacity;
+    }
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 900px) {
@@ -1013,7 +1040,7 @@
         <p class="section-label">Lo que nos hace únicos</p>
         <h2>Más que un bar.<br><span class="accent">Una experiencia.</span></h2>
       </div>
-      <div class="features-grid">
+      <div class="features-grid stagger">
         <div class="feature-card fade-in">
           <div class="feature-card-img"><img src="https://images.unsplash.com/photo-1571613316887-6f8d5cbf7ef7?w=600&h=340&fit=crop&crop=center" alt="Grifos de cerveza artesanal sirviendo en barra" /></div>
           <div class="feature-card-body">
@@ -1050,7 +1077,7 @@
         <h2>Los platos que <span class="accent">no puedes perderte</span></h2>
         <p>Fusión americano-mexicana hecha con cariño. Todo preparado al momento con ingredientes frescos.</p>
       </div>
-      <div class="menu-grid">
+      <div class="menu-grid stagger">
         <div class="menu-card fade-in">
           <div class="menu-emoji"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg></div>
           <div class="menu-info">
@@ -1191,7 +1218,7 @@
         <p class="section-label">Opiniones</p>
         <h2>Lo que dicen <span class="accent">nuestros clientes</span></h2>
       </div>
-      <div class="reviews-grid">
+      <div class="reviews-grid stagger">
         <div class="review-card fade-in">
           <div class="review-stars">★★★★★</div>
           <p class="review-text">"Los chilaquiles son increíbles, de lo mejor que he probado en Madrid. La selección de cervezas artesanales es brutal y Mark siempre te recomienda la perfecta."</p>
@@ -1271,13 +1298,7 @@
     </div>
   </footer>
 
-  <!-- Motion.dev CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/motion@11/dist/motion.js"></script>
-
   <script>
-    const { animate, scroll, inView, stagger } = Motion;
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
     // ─── NAV SCROLL ───
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => {
@@ -1300,102 +1321,55 @@
       });
     });
 
-    // Helpers (available to both animated and fallback paths)
-    function showNow(el) {
-      el.style.opacity = '1';
-      el.style.transform = 'none';
-      el.classList.add('visible');
-    }
-    function isAlreadyPast(el) {
-      return el.getBoundingClientRect().top < window.innerHeight * 0.85;
-    }
-
-    if (!prefersReduced) {
-
-      // Shared easing — smooth deceleration
-      const ease = [0.16, 1, 0.3, 1];
-
-      // ─── 1. HERO ENTRANCE ───
-      const heroContent = document.querySelector('.hero-content');
-      const heroVisual = document.querySelector('.hero-visual');
-
-      if (heroContent) {
-        animate(heroContent,
-          { opacity: [0, 1], y: [20, 0] },
-          { duration: 0.8, easing: ease, delay: 0.1 }
-        );
-      }
-      if (heroVisual) {
-        animate(heroVisual,
-          { opacity: [0, 1], y: [24, 0] },
-          { duration: 0.9, easing: ease, delay: 0.3 }
-        );
-      }
-
-      // ─── 2. HERO IMAGE PARALLAX (subtle) ───
-      const heroImg = document.querySelector('.hero-img-wrap img');
-      if (heroImg) {
-        scroll(
-          animate(heroImg, { y: ['-2%', '4%'] }, { easing: 'linear' }),
-          { target: document.querySelector('.hero'), offset: ['start start', 'end start'] }
-        );
-      }
-
-      // ─── 3. SCROLL REVEAL — .fade-in elements ───
-      // Instantly reveal anything already in view, animate the rest
-      document.querySelectorAll('.fade-in').forEach(el => {
-        if (isAlreadyPast(el)) {
-          showNow(el);
-        } else {
-          inView(el, () => {
-            animate(el,
-              { opacity: [0, 1], y: [14, 0] },
-              { duration: 0.55, easing: ease }
-            );
-          }, { margin: '0px 0px -120px 0px' }); // trigger 120px before entering
+    // ─── SCROLL REVEAL (Intersection Observer) ───
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObs.unobserve(entry.target);
         }
       });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
 
-      // ─── 4. STAGGERED CARDS ───
-      ['.features-grid', '.menu-grid', '.reviews-grid'].forEach(gridSel => {
-        const grid = document.querySelector(gridSel);
-        if (!grid) return;
-        const cards = Array.from(grid.children);
+    // Observe all .fade-in elements (individual items + stagger grids)
+    document.querySelectorAll('.fade-in').forEach(el => revealObs.observe(el));
 
-        if (isAlreadyPast(grid)) {
-          // Already scrolled past — show all instantly
-          cards.forEach(c => showNow(c));
-        } else {
-          cards.forEach(c => { c.style.opacity = '0'; });
-          inView(grid, () => {
-            animate(cards,
-              { opacity: [0, 1], y: [14, 0] },
-              { duration: 0.55, easing: ease, delay: stagger(0.06) }
-            );
-          }, { margin: '0px 0px -120px 0px' });
+    // ─── STAGGER GRIDS — observe parent, reveal children ───
+    const staggerObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          // Add .visible to all .fade-in children — nth-child delays stagger them
+          entry.target.querySelectorAll('.fade-in').forEach(child => {
+            child.classList.add('visible');
+          });
+          staggerObs.unobserve(entry.target);
         }
       });
+    }, { threshold: 0.05, rootMargin: '0px 0px -40px 0px' });
 
-      // ─── 5. STATS COUNTER ───
-      const statsGrid = document.querySelector('.stats-grid');
-      if (statsGrid) {
-        let statsCounted = false;
+    document.querySelectorAll('.stagger').forEach(grid => staggerObs.observe(grid));
 
-        function countStats() {
-          if (statsCounted) return;
+    // ─── STATS COUNTER (easeOutExpo, vanilla rAF) ───
+    let statsCounted = false;
+    const statsObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !statsCounted) {
           statsCounted = true;
+          statsObs.unobserve(entry.target);
+
           document.querySelectorAll('.stat-number[data-count]').forEach(el => {
             const target = parseFloat(el.dataset.count);
             const decimals = parseInt(el.dataset.decimals || '0');
             const prefix = el.dataset.prefix || '';
             const suffix = el.dataset.suffix || '';
             const sep = el.dataset.separator || '';
-
             const start = performance.now();
-            const duration = 2000;
+            const duration = 1500;
+
             function tick(now) {
               const t = Math.min((now - start) / duration, 1);
-              const eased = 1 - Math.pow(1 - t, 4);
+              // easeOutExpo: fast start, very smooth deceleration
+              const eased = t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
               const val = eased * target;
               let display = decimals > 0
                 ? val.toFixed(decimals)
@@ -1407,51 +1381,15 @@
             requestAnimationFrame(tick);
           });
         }
-
-        if (isAlreadyPast(statsGrid)) {
-          countStats();
-        } else {
-          inView(statsGrid, countStats, { margin: '0px 0px -80px 0px' });
-        }
-      }
-
-      // ─── 6. BEER IMAGE ZOOM ON SCROLL ───
-      const beerImg = document.querySelector('.beer-img-wrap img');
-      const beerSection = document.querySelector('.beer-section');
-      if (beerImg && beerSection) {
-        scroll(
-          animate(beerImg, { scale: [1, 1.05] }, { easing: 'linear' }),
-          { target: beerSection, offset: ['start end', 'end start'] }
-        );
-      }
-
-      // ─── 7. HOVER — cards ───
-      document.querySelectorAll('.feature-card, .menu-card, .review-card').forEach(card => {
-        card.addEventListener('mouseenter', () => {
-          animate(card, { scale: 1.015 }, { type: 'spring', stiffness: 300, damping: 30 });
-        });
-        card.addEventListener('mouseleave', () => {
-          animate(card, { scale: 1 }, { type: 'spring', stiffness: 250, damping: 28 });
-        });
       });
+    }, { threshold: 0.2 });
 
-      // ─── 8. HOVER — buttons ───
-      document.querySelectorAll('.btn-gold, .btn-outline').forEach(btn => {
-        btn.addEventListener('mouseenter', () => {
-          animate(btn, { scale: 1.03 }, { type: 'spring', stiffness: 350, damping: 28 });
-        });
-        btn.addEventListener('mouseleave', () => {
-          animate(btn, { scale: 1 }, { type: 'spring', stiffness: 300, damping: 30 });
-        });
-      });
+    const statsGrid = document.querySelector('.stats-grid');
+    if (statsGrid) statsObs.observe(statsGrid);
 
-    } else {
-      // Reduced motion — just show everything immediately
+    // ─── REDUCED MOTION — show everything immediately ───
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
-      document.querySelector('.hero-content')?.classList.add('animated');
-      document.querySelector('.hero-visual')?.classList.add('animated');
-
-      // Still count stats without animation
       document.querySelectorAll('.stat-number[data-count]').forEach(el => {
         const target = parseFloat(el.dataset.count);
         const decimals = parseInt(el.dataset.decimals || '0');
@@ -1461,22 +1399,13 @@
         let display = decimals > 0 ? target.toFixed(decimals) : Math.round(target).toString();
         if (sep) display = display.replace(/\B(?=(\d{3})+(?!\d))/g, sep);
         el.textContent = prefix + display + suffix;
+        statsCounted = true;
       });
     }
 
-    // Fallback — reveal any stuck elements
+    // ─── FALLBACK — reveal stuck elements after 1.5s ───
     setTimeout(() => {
-      document.querySelectorAll('.fade-in').forEach(el => {
-        if (getComputedStyle(el).opacity === '0') showNow(el);
-      });
-      ['.hero-content', '.hero-visual'].forEach(sel => {
-        const el = document.querySelector(sel);
-        if (el && getComputedStyle(el).opacity === '0') el.style.opacity = '1';
-      });
-      // Reveal any hidden card children
-      document.querySelectorAll('.features-grid > *, .menu-grid > *, .reviews-grid > *').forEach(c => {
-        if (getComputedStyle(c).opacity === '0') showNow(c);
-      });
+      document.querySelectorAll('.fade-in:not(.visible)').forEach(el => el.classList.add('visible'));
     }, 1500);
   </script>
 </body>
