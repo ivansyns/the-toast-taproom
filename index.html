@@ -126,7 +126,7 @@
       color: var(--dark) !important;
       font-weight: 700 !important;
       padding: 10px 24px !important;
-      border-radius: 999px !important;
+      border-radius: 3px !important;
       transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease !important;
       box-shadow: 0 4px 20px rgba(212,168,83,0.3);
     }
@@ -270,13 +270,7 @@
       color: transparent;
     }
 
-    .hero p {
-      font-size: 0.9rem;
-      color: rgba(245,240,232,0.7);
-      max-width: 400px;
-      margin-bottom: 36px;
-      line-height: 1.7;
-    }
+
 
     .hero-tagline {
       font-family: 'Outfit', sans-serif;
@@ -429,6 +423,7 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
+      align-items: stretch;
     }
 
     .feature-card {
@@ -436,6 +431,8 @@
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
       transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
       will-change: transform, opacity;
     }
@@ -459,6 +456,7 @@
 
     .feature-card-body {
       padding: 28px 24px 32px;
+      flex: 1;
     }
 
     .feature-card:hover {
@@ -562,8 +560,8 @@
     .beer-inner {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: center;
+      gap: 60px;
+      align-items: stretch;
     }
 
     .beer-visual {
@@ -573,7 +571,7 @@
     .beer-img-wrap {
       border-radius: 20px;
       overflow: hidden;
-      aspect-ratio: 3/4;
+      height: 100%;
       box-shadow: 0 24px 64px rgba(0,0,0,0.4);
     }
 
@@ -636,7 +634,7 @@
 
     /* ─── STATS ─── */
     .stats-section {
-      padding: 80px 0;
+      padding: 120px 0;
       background: rgba(212,168,83,0.04);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
@@ -760,7 +758,6 @@
       font-size: 0.9rem;
       color: rgba(245,240,232,0.75);
       line-height: 1.65;
-      font-style: italic;
       margin-bottom: 18px;
     }
 
@@ -776,7 +773,7 @@
 
     /* ─── CTA ─── */
     .cta-section {
-      padding: 140px 0;
+      padding: 120px 0;
       text-align: center;
       position: relative;
     }
@@ -1062,8 +1059,8 @@
           <strong>20+</strong>
         </div>
         <div class="hero-tag">
-          Cerveza · Brunch
-          <strong>& Fusión</strong>
+          Cocina
+          <strong>Fusión</strong>
         </div>
       </div>
     </div>
@@ -1440,10 +1437,24 @@
       });
     }
 
-    // ─── FALLBACK — reveal stuck elements after 1.5s ───
+    // ─── FALLBACK — reveal stuck elements + finalize stats after 2s ───
     setTimeout(() => {
       document.querySelectorAll('.fade-in:not(.visible)').forEach(el => el.classList.add('visible'));
-    }, 1500);
+      // Ensure stats show final values even if counter was interrupted
+      if (!statsCounted) {
+        statsCounted = true;
+        document.querySelectorAll('.stat-number[data-count]').forEach(el => {
+          const target = parseFloat(el.dataset.count);
+          const decimals = parseInt(el.dataset.decimals || '0');
+          const prefix = el.dataset.prefix || '';
+          const suffix = el.dataset.suffix || '';
+          const sep = el.dataset.separator || '';
+          let display = decimals > 0 ? target.toFixed(decimals) : Math.round(target).toString();
+          if (sep) display = display.replace(/\B(?=(\d{3})+(?!\d))/g, sep);
+          el.textContent = prefix + display + suffix;
+        });
+      }
+    }, 2000);
   </script>
 </body>
 </html>
