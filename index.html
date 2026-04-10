@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Toast Taproom — Cervecería Artesanal & Brunch en Malasaña, Madrid</title>
+  <meta name="description" content="Más de 20 grifos de cerveza artesanal española, brunch americano-mexicano y los mejores chilaquiles de Madrid. Calle San Vicente Ferrer 33, Malasaña." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:       #D4A853;
+      --gold-light: #E8C97A;
+      --gold-dark:  #B8903A;
+      --charcoal:   #1A1A1A;
+      --dark:       #111111;
+      --warm-gray:  #2A2622;
+      --cream:      #F5F0E8;
+      --cream-dark: #E8DFD0;
+      --text:       #F5F0E8;
+      --text-muted: #B5A998;
+      --border:     rgba(212,168,83,0.15);
+      --surface:    rgba(255,255,255,0.04);
+      --radius:     12px;
+      --radius-lg:  20px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Outfit', sans-serif;
+      font-size: 17px;
+      color: var(--text);
+      background: var(--dark);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Playfair Display', serif; font-weight: 800; }
+    h1 { letter-spacing: -0.03em; }
+    h2 { letter-spacing: -0.02em; }
+
+    .accent { color: var(--gold); }
+
+    /* ─── NOISE GRAIN ─── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.04;
+      pointer-events: none;
+      z-index: 9999;
+    }
+
+    /* ─── CONTAINER ─── */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 clamp(20px, 4vw, 48px);
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 200;
+      padding: 16px clamp(20px, 4vw, 48px);
+      background: transparent;
+      transition: background 0.4s, backdrop-filter 0.4s;
+    }
+
+    nav.scrolled {
+      background: rgba(17,17,17,0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+    }
+
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--cream);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-logo .the { font-weight: 400; opacity: 0.6; font-size: 0.85em; }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: rgba(245,240,232,0.6);
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 999px;
+      transition: color 0.2s, background 0.2s;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .nav-links a:hover {
+      color: var(--gold);
+      background: rgba(212,168,83,0.08);
+    }
+
+    .nav-cta {
+      background: var(--gold) !important;
+      color: var(--dark) !important;
+      font-weight: 700 !important;
+      padding: 10px 24px !important;
+      border-radius: 999px !important;
+      transition: transform 0.2s, box-shadow 0.2s !important;
+      box-shadow: 0 4px 20px rgba(212,168,83,0.3);
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-1px) !important;
+      box-shadow: 0 6px 28px rgba(212,168,83,0.45) !important;
+      background: var(--gold-light) !important;
+    }
+
+    /* ─── HAMBURGER ─── */
+    .hamburger {
+      display: none;
+      flex-direction: column; gap: 5px;
+      width: 32px; height: 32px;
+      background: none; border: none; cursor: pointer;
+      justify-content: center; align-items: center;
+      z-index: 300;
+    }
+    .hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--cream); border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+      transform-origin: center;
+    }
+    .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hamburger.open span:nth-child(2) { opacity: 0; }
+    .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ─── MOBILE MENU ─── */
+    .mobile-menu {
+      position: fixed; inset: 0; z-index: 150;
+      background: var(--dark);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0; opacity: 0; pointer-events: none;
+      transform: translateY(-20px);
+      transition: opacity 0.35s, transform 0.35s;
+    }
+    .mobile-menu.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .mobile-menu a {
+      display: block; text-decoration: none;
+      color: var(--cream); font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; font-weight: 800;
+      padding: 16px 0; text-align: center;
+      transition: color 0.2s;
+    }
+    .mobile-menu a:hover { color: var(--gold); }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+    }
+    @media (min-width: 769px) {
+      .mobile-menu { display: none !important; }
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      padding: 120px 0 80px;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 70% 40%, rgba(212,168,83,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 20% 80%, rgba(212,168,83,0.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 clamp(20px, 4vw, 48px);
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 60px;
+      align-items: center;
+      position: relative; z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center; gap: 8px;
+      background: rgba(212,168,83,0.12);
+      color: var(--gold);
+      font-size: 0.72rem; font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 100px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(212,168,83,0.2);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      line-height: 1.08;
+      margin-bottom: 24px;
+      color: var(--cream);
+    }
+
+    .hero h1 .line-gold {
+      display: block;
+      background: linear-gradient(135deg, var(--gold), var(--gold-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 460px;
+      margin-bottom: 36px;
+      line-height: 1.7;
+    }
+
+    .hero-ctas {
+      display: flex; gap: 16px; flex-wrap: wrap;
+    }
+
+    .btn-gold {
+      background: var(--gold);
+      color: var(--dark);
+      border: none;
+      padding: 14px 32px;
+      border-radius: 999px;
+      font-size: 0.9rem; font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 4px 24px rgba(212,168,83,0.3);
+      font-family: 'Outfit', sans-serif;
+      letter-spacing: 0.02em;
+    }
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(212,168,83,0.45);
+      background: var(--gold-light);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--cream);
+      border: 1px solid rgba(245,240,232,0.2);
+      padding: 14px 32px;
+      border-radius: 999px;
+      font-size: 0.9rem; font-weight: 500;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      text-decoration: none;
+      display: inline-block;
+      font-family: 'Outfit', sans-serif;
+    }
+    .btn-outline:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(212,168,83,0.06);
+    }
+
+    /* Hero visual */
+    .hero-visual {
+      position: relative;
+      display: flex; justify-content: center; align-items: center;
+    }
+
+    .hero-img-wrap {
+      width: 100%; max-width: 480px;
+      aspect-ratio: 4/5;
+      border-radius: 24px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,168,83,0.1);
+    }
+
+    .hero-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-img-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(17,17,17,0.6) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    .hero-stat-badge {
+      position: absolute;
+      bottom: 24px; left: 24px;
+      background: rgba(17,17,17,0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(212,168,83,0.2);
+      border-radius: 16px;
+      padding: 14px 18px;
+      display: flex; align-items: center; gap: 12px;
+    }
+
+    .hero-stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem; font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .hero-stat-text {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      line-height: 1.3;
+    }
+
+    .hero-stat-text strong {
+      display: block;
+      color: var(--cream);
+      font-size: 0.8rem;
+    }
+
+    /* ─── SECTION SHARED ─── */
+    .section-label {
+      display: inline-flex; align-items: center;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 24px; height: 1px;
+      background: var(--gold);
+      margin-right: 12px;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .section-header h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+
+    .section-header p {
+      font-size: 1rem;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto;
+    }
+
+    /* ─── FEATURES (what makes us special) ─── */
+    .features {
+      padding: 120px 0;
+      position: relative;
+    }
+
+    .features::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(212,168,83,0.2) 20%, rgba(212,168,83,0.2) 80%, transparent);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: transform 0.25s, border-color 0.25s, box-shadow 0.25s;
+    }
+
+    .feature-card-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      overflow: hidden;
+    }
+
+    .feature-card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+
+    .feature-card:hover .feature-card-img img {
+      transform: scale(1.04);
+    }
+
+    .feature-card-body {
+      padding: 28px 24px 32px;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(212,168,83,0.3);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+    }
+
+    .feature-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: rgba(212,168,83,0.1);
+      border: 1px solid rgba(212,168,83,0.15);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+      margin-bottom: 20px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+      color: var(--cream);
+    }
+
+    .feature-card p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+    }
+
+    /* ─── MENU HIGHLIGHTS ─── */
+    .menu-section {
+      padding: 120px 0;
+      background: var(--warm-gray);
+      position: relative;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .menu-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(212,168,83,0.1);
+      border-radius: 16px;
+      padding: 28px 24px;
+      display: flex; gap: 16px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .menu-card:hover {
+      border-color: rgba(212,168,83,0.25);
+      background: rgba(212,168,83,0.04);
+    }
+
+    .menu-emoji {
+      flex-shrink: 0;
+      width: 56px; height: 56px;
+      background: rgba(212,168,83,0.08);
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold);
+    }
+
+    .menu-info h3 {
+      font-size: 1rem; font-weight: 700;
+      font-family: 'Outfit', sans-serif;
+      color: var(--cream);
+      margin-bottom: 4px;
+    }
+
+    .menu-info p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .menu-tag {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--gold);
+      background: rgba(212,168,83,0.1);
+      padding: 2px 8px;
+      border-radius: 100px;
+      margin-top: 8px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ─── BEER SECTION ─── */
+    .beer-section {
+      padding: 120px 0;
+      position: relative;
+    }
+
+    .beer-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .beer-visual {
+      position: relative;
+    }
+
+    .beer-img-wrap {
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+    }
+
+    .beer-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+
+    .tap-count-badge {
+      position: absolute;
+      top: -16px; right: -16px;
+      width: 90px; height: 90px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: var(--dark);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-weight: 900;
+      box-shadow: 0 8px 32px rgba(212,168,83,0.4);
+    }
+
+    .tap-count-badge .num { font-size: 1.6rem; line-height: 1; }
+    .tap-count-badge .label { font-size: 0.55rem; font-family: 'Outfit', sans-serif; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+
+    .beer-content h2 {
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      margin-bottom: 20px;
+      line-height: 1.15;
+    }
+
+    .beer-content > p {
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+
+    .beer-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+
+    .beer-list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.92rem;
+      color: rgba(245,240,232,0.7);
+    }
+
+    .beer-list li .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+      flex-shrink: 0;
+    }
+
+    /* ─── STATS ─── */
+    .stats-section {
+      padding: 80px 0;
+      background: rgba(212,168,83,0.04);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px;
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.6rem;
+      font-weight: 900;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ─── HOURS ─── */
+    .hours-section {
+      padding: 120px 0;
+    }
+
+    .hours-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .hours-content h2 {
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      margin-bottom: 16px;
+      line-height: 1.15;
+    }
+
+    .hours-content > p {
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      line-height: 1.7;
+    }
+
+    .hours-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .hours-table tr {
+      border-bottom: 1px solid rgba(212,168,83,0.08);
+    }
+
+    .hours-table td {
+      padding: 14px 0;
+      font-size: 0.9rem;
+    }
+
+    .hours-table td:first-child {
+      color: var(--cream);
+      font-weight: 600;
+    }
+
+    .hours-table td:last-child {
+      text-align: right;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .hours-map {
+      border-radius: 20px;
+      overflow: hidden;
+      aspect-ratio: 1/1;
+      background: var(--warm-gray);
+      border: 1px solid var(--border);
+    }
+
+    .hours-map iframe {
+      width: 100%; height: 100%; border: 0;
+      filter: grayscale(0.6) brightness(0.7) contrast(1.1);
+    }
+
+    /* ─── REVIEWS ─── */
+    .reviews-section {
+      padding: 120px 0;
+      background: var(--warm-gray);
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .review-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .review-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(212,168,83,0.3);
+    }
+
+    .review-stars {
+      color: var(--gold);
+      font-size: 0.9rem;
+      margin-bottom: 14px;
+    }
+
+    .review-text {
+      font-size: 0.9rem;
+      color: rgba(245,240,232,0.75);
+      line-height: 1.65;
+      font-style: italic;
+      margin-bottom: 18px;
+    }
+
+    .review-author {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .review-author strong {
+      color: var(--cream);
+      font-weight: 600;
+    }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      padding: 100px 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: 50%;
+      transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse, rgba(212,168,83,0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .cta-section h2 {
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      margin-bottom: 16px;
+      position: relative; z-index: 1;
+    }
+
+    .cta-section p {
+      color: var(--text-muted);
+      margin-bottom: 36px;
+      position: relative; z-index: 1;
+    }
+
+    .cta-btns {
+      display: flex; gap: 16px;
+      justify-content: center; flex-wrap: wrap;
+      position: relative; z-index: 1;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: #0A0A0A;
+      border-top: 1px solid rgba(212,168,83,0.08);
+      padding: 60px 0 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem; font-weight: 900;
+      color: var(--cream);
+      margin-bottom: 12px;
+    }
+
+    .footer-desc {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      max-width: 260px;
+    }
+
+    .footer-col h4 {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 16px;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col a {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-thickness: 1px;
+      text-decoration-color: rgba(245,240,232,0.15);
+      color: rgba(245,240,232,0.5);
+      font-size: 0.82rem;
+      transition: color 0.2s, text-decoration-color 0.2s;
+    }
+    .footer-col a:hover { color: var(--gold); text-decoration-color: var(--gold); }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(245,240,232,0.06);
+      padding-top: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+
+    .footer-copy {
+      font-size: 0.72rem;
+      color: rgba(245,240,232,0.3);
+    }
+
+    .footer-socials {
+      display: flex; gap: 12px;
+    }
+
+    .footer-socials a {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: rgba(245,240,232,0.05);
+      border: 1px solid rgba(245,240,232,0.08);
+      display: flex; align-items: center; justify-content: center;
+      color: rgba(245,240,232,0.5);
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      text-decoration: none;
+    }
+    .footer-socials a:hover {
+      background: rgba(212,168,83,0.12);
+      color: var(--gold);
+      border-color: rgba(212,168,83,0.25);
+    }
+    .footer-socials svg { width: 16px; height: 16px; }
+
+    /* ─── SCROLL FADE ─── */
+    .fade-in {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; text-align: center; gap: 48px; }
+      .hero p { margin-left: auto; margin-right: auto; }
+      .hero-ctas { justify-content: center; }
+      .features-grid { grid-template-columns: 1fr; }
+      .menu-grid { grid-template-columns: 1fr; }
+      .beer-inner { grid-template-columns: 1fr; gap: 48px; }
+      .beer-visual { order: -1; max-width: 360px; margin: 0 auto; }
+      .hours-inner { grid-template-columns: 1fr; gap: 48px; }
+      .reviews-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      body { font-size: 16px; }
+      .hero h1 { font-size: clamp(2rem, 8vw, 2.8rem); }
+      .footer-grid { grid-template-columns: 1fr; text-align: center; }
+      .footer-desc { max-width: 100%; }
+      .footer-col ul { align-items: center; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+      .footer-socials { justify-content: center; }
+      .hero-stat-badge { left: 12px; bottom: 12px; }
+      .tap-count-badge { width: 72px; height: 72px; top: -10px; right: -10px; }
+      .tap-count-badge .num { font-size: 1.3rem; }
+    }
+
+    /* ─── FOCUS STATES ─── */
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+      border-radius: 4px;
+    }
+
+    /* ─── CURSOR ON INTERACTIVE CARDS ─── */
+    .feature-card, .menu-card, .review-card { cursor: pointer; }
+
+    /* ─── SKIP LINK ─── */
+    .skip-link {
+      position: absolute;
+      top: -100px; left: 16px;
+      background: var(--gold);
+      color: var(--dark);
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      z-index: 9999;
+      text-decoration: none;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 16px; }
+
+    /* ─── REDUCED MOTION ─── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .fade-in { opacity: 1; transform: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Saltar al contenido</a>
+
+  <!-- ─── NAV ─── -->
+  <nav id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo"><span class="the">The </span>Toast Taproom</a>
+      <ul class="nav-links">
+        <li><a href="#carta">Carta</a></li>
+        <li><a href="#cervezas">Cervezas</a></li>
+        <li><a href="#horario">Horario</a></li>
+        <li><a href="#opiniones">Opiniones</a></li>
+        <li><a href="https://wa.me/34915326791" target="_blank" class="nav-cta">Reservar</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" aria-label="Menú">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="mobile-menu" id="mobile-menu">
+    <a href="#carta" class="mm-link">Carta</a>
+    <a href="#cervezas" class="mm-link">Cervezas</a>
+    <a href="#horario" class="mm-link">Horario</a>
+    <a href="#opiniones" class="mm-link">Opiniones</a>
+    <a href="https://wa.me/34915326791" target="_blank" class="mm-link" style="color:var(--gold)">Reservar</a>
+  </div>
+
+  <main id="main-content">
+
+  <!-- ─── HERO ─── -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-content">
+        <div class="hero-badge"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg> Malasaña, Madrid</div>
+        <h1>Cerveza artesanal.<br><span class="line-gold">Brunch legendario.</span></h1>
+        <p>20+ grifos de cerveza artesanal española, los mejores chilaquiles de Madrid y un brunch que merece la cola. Bienvenido al corazón de Malasaña.</p>
+        <div class="hero-ctas">
+          <a href="https://wa.me/34915326791" target="_blank" class="btn-gold">Reservar mesa</a>
+          <a href="#carta" class="btn-outline">Ver la carta</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-img-wrap">
+          <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&h=750&fit=crop&crop=center" alt="Interior del The Toast Taproom, ambiente cálido con iluminación tenue" />
+          <div class="hero-img-overlay"></div>
+          <div class="hero-stat-badge">
+            <div class="hero-stat-number">4.8</div>
+            <div class="hero-stat-text">
+              <strong>Google Reviews</strong>
+              +2.600 opiniones
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FEATURES ─── -->
+  <section class="features" id="nosotros">
+    <div class="container">
+      <div class="section-header fade-in">
+        <p class="section-label">Lo que nos hace únicos</p>
+        <h2>Más que un bar.<br><span class="accent">Una experiencia.</span></h2>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card fade-in">
+          <div class="feature-card-img"><img src="https://images.unsplash.com/photo-1571613316887-6f8d5cbf7ef7?w=600&h=340&fit=crop&crop=center" alt="Grifos de cerveza artesanal sirviendo en barra" /></div>
+          <div class="feature-card-body">
+            <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11h1a3 3 0 0 1 0 6h-1"/><path d="M3 7v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7"/><rect x="3" y="3" width="14" height="4" rx="1"/></svg></div>
+            <h3>20+ Grifos Artesanales</h3>
+            <p>Cerveza española de las mejores microcervecerías del país. Selección rotativa para que siempre descubras algo nuevo.</p>
+          </div>
+        </div>
+        <div class="feature-card fade-in">
+          <div class="feature-card-img"><img src="https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=600&h=340&fit=crop&crop=center" alt="Tacos y platos de fusión mexicana" /></div>
+          <div class="feature-card-body">
+            <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/><path d="M7 12h10"/><path d="M12 7v10"/></svg></div>
+            <h3>Fusión Americano-Mexicana</h3>
+            <p>Chilaquiles con jackfruit, nachos cargados, tacos de autor y los huevos rancheros que necesitas después de una noche en Malasaña.</p>
+          </div>
+        </div>
+        <div class="feature-card fade-in">
+          <div class="feature-card-img"><img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=600&h=340&fit=crop&crop=center" alt="Mesa de brunch con huevos, tostadas y café" /></div>
+          <div class="feature-card-body">
+            <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"/><path d="M12 11v11"/><path d="m19 3-7 8-7-8Z"/></svg></div>
+            <h3>Brunch de Fin de Semana</h3>
+            <p>Sábados desde las 10h y domingos todo el día. Fried chicken & waffles, tortitas, eggs benedict y cócteles matutinos.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── MENU HIGHLIGHTS ─── -->
+  <section class="menu-section" id="carta">
+    <div class="container">
+      <div class="section-header fade-in">
+        <p class="section-label">Carta</p>
+        <h2>Los platos que <span class="accent">no puedes perderte</span></h2>
+        <p>Fusión americano-mexicana hecha con cariño. Todo preparado al momento con ingredientes frescos.</p>
+      </div>
+      <div class="menu-grid">
+        <div class="menu-card fade-in">
+          <div class="menu-emoji"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg></div>
+          <div class="menu-info">
+            <h3>Chilaquiles Clásicos</h3>
+            <p>Nuestro plato estrella. Tortilla crujiente, salsa verde, pollo deshilachado, crema agria y queso fresco.</p>
+            <span class="menu-tag">Más pedido</span>
+          </div>
+        </div>
+        <div class="menu-card fade-in">
+          <div class="menu-emoji"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18M3 15h18"/><path d="M5 11a7 7 0 0 1 14 0"/><path d="M5 15a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2"/></svg></div>
+          <div class="menu-info">
+            <h3>Smash Burger con Bacon</h3>
+            <p>Carne smash a la plancha, bacon ahumado, cheddar fundido, salsa secreta y pan brioche artesano.</p>
+          </div>
+        </div>
+        <div class="menu-card fade-in">
+          <div class="menu-emoji"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div class="menu-info">
+            <h3>Eggs Benedict Aguacate</h3>
+            <p>Muffin inglés tostado, huevo pochado perfecto, aguacate, bacon crujiente y salsa holandesa casera.</p>
+            <span class="menu-tag">Brunch</span>
+          </div>
+        </div>
+        <div class="menu-card fade-in">
+          <div class="menu-emoji"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
+          <div class="menu-info">
+            <h3>Fried Chicken & Waffles</h3>
+            <p>Pollo marinado y frito al estilo sureño sobre waffle belga con sirope de arce y mantequilla.</p>
+            <span class="menu-tag">Brunch</span>
+          </div>
+        </div>
+        <div class="menu-card fade-in">
+          <div class="menu-emoji"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-4.97 0-9 3.13-9 7s4.03 7 9 7 9-3.13 9-7-4.03-7-9-7z"/><path d="M3 10c0 3.87 4.03 7 9 7s9-3.13 9-7"/></svg></div>
+          <div class="menu-info">
+            <h3>Kimchi Balls</h3>
+            <p>Croquetas de kimchi crujientes por fuera, cremosas por dentro. Un fusión hit que repiten todos.</p>
+            <span class="menu-tag">Fan favorite</span>
+          </div>
+        </div>
+        <div class="menu-card fade-in">
+          <div class="menu-emoji"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></div>
+          <div class="menu-info">
+            <h3>Chilaquiles Veganos</h3>
+            <p>Versión vegetal con jackfruit desmenuzado, salsa roja, aguacate y crema de anacardos. Sin compromiso en sabor.</p>
+            <span class="menu-tag">Vegano</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── BEER ─── -->
+  <section class="beer-section" id="cervezas">
+    <div class="container">
+      <div class="beer-inner">
+        <div class="beer-visual fade-in">
+          <div class="beer-img-wrap">
+            <img src="https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=500&h=667&fit=crop&crop=center" alt="Grifos de cerveza artesanal en barra del The Toast Taproom" />
+          </div>
+          <div class="tap-count-badge">
+            <span class="num">20+</span>
+            <span class="label">Grifos</span>
+          </div>
+        </div>
+        <div class="beer-content fade-in">
+          <p class="section-label">Cerveza artesanal</p>
+          <h2>Lo mejor de las <span class="accent">microcervecerías españolas</span></h2>
+          <p>Seleccionamos cerveza de pequeños productores de toda España. 20 grifos rotativos para que cada visita sea diferente. Mark, nuestro cervecero, te recomienda la perfecta para ti.</p>
+          <ul class="beer-list">
+            <li><span class="dot"></span> La Chula — Madrid</li>
+            <li><span class="dot"></span> Bacterio Brewing — Valencia</li>
+            <li><span class="dot"></span> Cervezas GranVía — Madrid</li>
+            <li><span class="dot"></span> Cerveza Vulturis — Extremadura</li>
+            <li><span class="dot"></span> + 15 grifos más rotativos</li>
+          </ul>
+          <a href="https://untappd.com/v/the-toast-taproom/10010017" target="_blank" class="btn-outline">Ver grifos en Untappd →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── STATS ─── -->
+  <section class="stats-section">
+    <div class="container">
+      <div class="stats-grid fade-in">
+        <div>
+          <div class="stat-number">4.8</div>
+          <div class="stat-label">Valoración en Google</div>
+        </div>
+        <div>
+          <div class="stat-number">2.600+</div>
+          <div class="stat-label">Opiniones verificadas</div>
+        </div>
+        <div>
+          <div class="stat-number">20+</div>
+          <div class="stat-label">Grifos artesanales</div>
+        </div>
+        <div>
+          <div class="stat-number">#154</div>
+          <div class="stat-label">De 20.000+ bares en Madrid</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── HOURS ─── -->
+  <section class="hours-section" id="horario">
+    <div class="container">
+      <div class="hours-inner">
+        <div class="hours-content fade-in">
+          <p class="section-label">Horario y ubicación</p>
+          <h2>Encuéntranos en el <span class="accent">corazón de Malasaña</span></h2>
+          <p>Calle de San Vicente Ferrer, 33 — a dos minutos del Metro Tribunal. Ven a tomar unas cañas entre semana o a brunchar el finde.</p>
+          <table class="hours-table">
+            <tr><td>Lunes</td><td>18:00 – 00:00</td></tr>
+            <tr><td>Martes</td><td>18:00 – 00:00</td></tr>
+            <tr><td>Miércoles</td><td>18:00 – 01:00</td></tr>
+            <tr><td>Jueves</td><td>18:00 – 01:00</td></tr>
+            <tr><td>Viernes</td><td>12:00 – 02:30</td></tr>
+            <tr><td>Sábado</td><td>10:00 – 02:30</td></tr>
+            <tr><td>Domingo</td><td>10:00 – 00:00</td></tr>
+          </table>
+          <div style="margin-top:28px;">
+            <a href="tel:+34915326791" class="btn-outline">📞 +34 915 32 67 91</a>
+          </div>
+        </div>
+        <div class="hours-map fade-in">
+          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3036.!2d-3.70356!3d40.42553!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd4228de6b7c4c5f%3A0x8c!2sCalle+de+San+Vicente+Ferrer%2C+33%2C+28004+Madrid!5e0!3m2!1ses!2ses!4v1700000000000!5m2!1ses!2ses" allowfullscreen loading="lazy" title="Mapa de ubicación del The Toast Taproom"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── REVIEWS ─── -->
+  <section class="reviews-section" id="opiniones">
+    <div class="container">
+      <div class="section-header fade-in">
+        <p class="section-label">Opiniones</p>
+        <h2>Lo que dicen <span class="accent">nuestros clientes</span></h2>
+      </div>
+      <div class="reviews-grid">
+        <div class="review-card fade-in">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Los chilaquiles son increíbles, de lo mejor que he probado en Madrid. La selección de cervezas artesanales es brutal y Mark siempre te recomienda la perfecta."</p>
+          <div class="review-author"><strong>Carlos M.</strong> · Google Reviews</div>
+        </div>
+        <div class="review-card fade-in">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"El mejor brunch de Malasaña sin duda. Los huevos benedict con aguacate están de escándalo y la limonada casera con menta es adictiva. Ambiente genial."</p>
+          <div class="review-author"><strong>Laura P.</strong> · Google Reviews</div>
+        </div>
+        <div class="review-card fade-in">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Fui por las cervezas y volví por las kimchi balls. 20 grifos de cerveza artesanal española — cada vez que voy hay algo nuevo. El personal es encantador."</p>
+          <div class="review-author"><strong>Javier R.</strong> · Google Reviews</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CTA ─── -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="fade-in">
+        <p class="section-label" style="justify-content:center">¿Listo para venir?</p>
+        <h2>Reserva tu mesa en <span class="accent">The Toast Taproom</span></h2>
+        <p style="max-width:480px;margin:0 auto 36px;color:var(--text-muted)">Ven a descubrir por qué más de 2.600 personas nos dan un 4.8 en Google. Te esperamos en Calle San Vicente Ferrer 33.</p>
+        <div class="cta-btns">
+          <a href="https://wa.me/34915326791" target="_blank" class="btn-gold">Reservar por WhatsApp</a>
+          <a href="tel:+34915326791" class="btn-outline">Llamar ahora</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <div class="footer-brand-name">The Toast Taproom</div>
+          <p class="footer-desc">Cervecería artesanal y brunch en Malasaña, Madrid. +20 grifos de cerveza española, fusión americano-mexicana y el ambiente que buscas.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Navegar</h4>
+          <ul>
+            <li><a href="#carta">Carta</a></li>
+            <li><a href="#cervezas">Cervezas</a></li>
+            <li><a href="#horario">Horario</a></li>
+            <li><a href="#opiniones">Opiniones</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Contacto</h4>
+          <ul>
+            <li><a href="tel:+34915326791">+34 915 32 67 91</a></li>
+            <li><a href="https://goo.gl/maps/thetoast" target="_blank">C/ San Vicente Ferrer 33</a></li>
+            <li><a href="https://wa.me/34915326791" target="_blank">WhatsApp</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Síguenos</h4>
+          <ul>
+            <li><a href="https://www.instagram.com/thetoasttaproom/" target="_blank">Instagram</a></li>
+            <li><a href="https://www.facebook.com/thetoastmalasana/" target="_blank">Facebook</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <div class="footer-copy">© 2026 The Toast Taproom · Grupo Bang Bang · Madrid</div>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/thetoasttaproom/" target="_blank" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+          <a href="https://www.facebook.com/thetoastmalasana/" target="_blank" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Nav scroll
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    }, { passive: true });
+
+    // Hamburger
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobile-menu');
+    hamburger.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu.classList.toggle('open');
+      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+    });
+    document.querySelectorAll('.mm-link').forEach(l => {
+      l.addEventListener('click', () => {
+        hamburger.classList.remove('open');
+        mobileMenu.classList.remove('open');
+        document.body.style.overflow = '';
+      });
+    });
+
+    // Scroll fade
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+    setTimeout(() => document.querySelectorAll('.fade-in:not(.visible)').forEach(el => el.classList.add('visible')), 400);
+  </script>
+</body>
+</html>
