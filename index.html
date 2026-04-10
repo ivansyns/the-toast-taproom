@@ -188,33 +188,52 @@
     .hero {
       position: relative;
       height: 100vh;
-      min-height: 680px;
+      min-height: 620px;
       display: flex;
       align-items: flex-end;
       padding-bottom: clamp(60px, 8vh, 100px);
       overflow: hidden;
     }
 
-    .hero::before {
-      content: '';
-      position: absolute; inset: 0;
+    /* Full-bleed background image */
+    .hero-bg-img {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+    }
+
+    .hero-bg-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* Gradient overlay — dark left, lighter right */
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
       background:
-        radial-gradient(ellipse 80% 70% at 65% 75%, rgba(212,168,83,0.10) 0%, transparent 55%),
-        radial-gradient(ellipse 50% 40% at 20% 30%, rgba(212,168,83,0.04) 0%, transparent 50%);
-      pointer-events: none;
+        radial-gradient(ellipse 80% 70% at 60% 80%, rgba(212,168,83,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 50% at 20% 30%, rgba(212,168,83,0.04) 0%, transparent 45%),
+        linear-gradient(160deg, rgba(17,17,17,0.82) 0%, rgba(17,14,8,0.62) 45%, rgba(17,17,17,0.78) 100%);
+      z-index: 1;
     }
 
     .hero-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
       max-width: 1300px;
       margin: 0 auto;
       padding: 0 clamp(20px, 5vw, 60px);
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 48px;
+      grid-template-columns: 1fr 1fr;
       align-items: flex-end;
-      position: relative; z-index: 1;
-      width: 100%;
+      gap: 40px;
     }
+
+    .hero-left {}
 
     .hero-eyebrow {
       font-size: 0.72rem;
@@ -238,13 +257,12 @@
 
     .hero h1 {
       font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(4.5rem, 9vw, 8rem);
-      line-height: 0.93;
+      font-size: clamp(5rem, 10vw, 9rem);
+      line-height: 0.92;
       letter-spacing: 0.01em;
       text-transform: uppercase;
       color: var(--cream);
-      margin-bottom: 36px;
-      padding-bottom: 6px; /* prevent descender clipping */
+      margin-bottom: 32px;
     }
 
     .hero h1 .outline {
@@ -253,16 +271,56 @@
     }
 
     .hero p {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      max-width: 420px;
-      margin-bottom: 40px;
+      font-size: 0.9rem;
+      color: rgba(245,240,232,0.7);
+      max-width: 400px;
+      margin-bottom: 36px;
       line-height: 1.7;
     }
 
     .hero-ctas {
       display: flex; gap: 16px; flex-wrap: wrap;
     }
+
+    .hero-sub {
+      font-size: 0.82rem;
+      color: rgba(245,240,232,0.6);
+      letter-spacing: 0.04em;
+      margin-top: 4px;
+    }
+
+    /* Right column — info tags */
+    .hero-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 16px;
+      padding-bottom: 8px;
+    }
+
+    .hero-tag {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 3px;
+      padding: 10px 18px;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(245,240,232,0.6);
+      text-align: right;
+    }
+
+    .hero-tag strong {
+      display: block;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.04em;
+      color: var(--cream);
+      line-height: 1;
+      margin-top: 3px;
+    }
+
+    .hero-tag .gold { color: var(--gold); }
 
     .btn-gold {
       background: var(--gold);
@@ -308,62 +366,7 @@
       background: rgba(212,168,83,0.06);
     }
 
-    /* Hero visual */
-    .hero-visual {
-      position: relative;
-      display: flex; justify-content: center; align-items: center;
-    }
-
-    .hero-img-wrap {
-      width: 100%; max-width: 480px;
-      aspect-ratio: 4/5;
-      border-radius: 24px;
-      overflow: hidden;
-      position: relative;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(212,168,83,0.1);
-    }
-
-    .hero-img-wrap img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .hero-img-overlay {
-      position: absolute; inset: 0;
-      background: linear-gradient(to top, rgba(17,17,17,0.6) 0%, transparent 40%);
-      pointer-events: none;
-    }
-
-    .hero-stat-badge {
-      position: absolute;
-      bottom: 24px; left: 24px;
-      background: rgba(17,17,17,0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(212,168,83,0.2);
-      border-radius: 16px;
-      padding: 14px 18px;
-      display: flex; align-items: center; gap: 12px;
-    }
-
-    .hero-stat-number {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem; font-weight: 900;
-      color: var(--gold);
-      line-height: 1;
-    }
-
-    .hero-stat-text {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-      line-height: 1.3;
-    }
-
-    .hero-stat-text strong {
-      display: block;
-      color: var(--cream);
-      font-size: 0.8rem;
-    }
+    /* (hero visual elements removed — image is now background) */
 
     /* ─── SECTION SHARED ─── */
     .section-label {
@@ -909,24 +912,24 @@
       from { opacity: 0; transform: translateY(24px); }
       to   { opacity: 1; transform: translateY(0); }
     }
-    .hero-content {
+    .hero-left {
       opacity: 0;
-      animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+      animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
       will-change: transform, opacity;
     }
-    .hero-visual {
+    .hero-right {
       opacity: 0;
-      animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
+      animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
       will-change: transform, opacity;
     }
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 900px) {
-      .hero { align-items: flex-end; min-height: 580px; padding-bottom: clamp(40px, 6vh, 80px); }
-      .hero-inner { grid-template-columns: 1fr; gap: 36px; }
-      .hero h1 { font-size: clamp(3.5rem, 14vw, 5rem); }
-      .hero-visual { display: none; }
-      .hero-eyebrow { justify-content: flex-start; }
+      .hero { min-height: 560px; }
+      .hero-inner { grid-template-columns: 1fr; gap: 24px; }
+      .hero h1 { font-size: clamp(3.8rem, 15vw, 5.5rem); }
+      .hero-right { flex-direction: row; flex-wrap: wrap; align-items: flex-start; justify-content: flex-start; }
+      .hero-tag { text-align: left; }
       .features-grid { grid-template-columns: 1fr; }
       .menu-grid { grid-template-columns: 1fr; }
       .beer-inner { grid-template-columns: 1fr; gap: 48px; }
@@ -947,7 +950,7 @@
       .footer-col ul { align-items: center; }
       .footer-bottom { flex-direction: column; text-align: center; }
       .footer-socials { justify-content: center; }
-      .hero-stat-badge { left: 12px; bottom: 12px; }
+      .hero-tag strong { font-size: 1.3rem; }
       .tap-count-badge { width: 72px; height: 72px; top: -10px; right: -10px; }
       .tap-count-badge .num { font-size: 1.3rem; }
     }
@@ -1023,27 +1026,35 @@
 
   <!-- ─── HERO ─── -->
   <section class="hero">
+    <!-- Full-bleed background image -->
+    <div class="hero-bg-img">
+      <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=1600&h=1000&fit=crop&crop=center&q=80" alt="Interior del The Toast Taproom, barra con iluminación cálida" />
+    </div>
+    <!-- Gradient overlay -->
+    <div class="hero-overlay" aria-hidden="true"></div>
+
     <div class="hero-inner">
-      <div class="hero-content">
+      <div class="hero-left">
         <div class="hero-eyebrow">Malasaña, Madrid</div>
         <h1>Cerveza<br>artesanal.<br><span class="outline">Brunch</span><br>legendario.</h1>
-        <p>20+ grifos de cerveza artesanal española, los mejores chilaquiles de Madrid y un brunch que merece la cola.</p>
         <div class="hero-ctas">
           <a href="https://wa.me/34915326791" target="_blank" class="btn-gold">Reservar mesa</a>
           <a href="#carta" class="btn-outline">Ver la carta</a>
         </div>
+        <span class="hero-sub">C/ San Vicente Ferrer 33, Madrid</span>
       </div>
-      <div class="hero-visual">
-        <div class="hero-img-wrap">
-          <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=600&h=750&fit=crop&crop=center" alt="Interior del The Toast Taproom, ambiente cálido con iluminación tenue" />
-          <div class="hero-img-overlay"></div>
-          <div class="hero-stat-badge">
-            <div class="hero-stat-number">4.8</div>
-            <div class="hero-stat-text">
-              <strong>Google Reviews</strong>
-              +2.600 opiniones
-            </div>
-          </div>
+      <div class="hero-right">
+        <div class="hero-tag">
+          Google Reviews
+          <strong><span class="gold">4.8</span> / 5</strong>
+        </div>
+        <div class="hero-tag">
+          Grifos artesanales
+          <strong>20+</strong>
+        </div>
+        <div class="hero-tag">
+          Cerveza · Brunch
+          <strong>& Fusión</strong>
         </div>
       </div>
     </div>
