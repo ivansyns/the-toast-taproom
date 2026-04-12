@@ -165,22 +165,49 @@
     /* ─── MOBILE MENU ─── */
     .mobile-menu {
       position: fixed; inset: 0; z-index: 150;
-      background: var(--dark);
+      background: rgba(17,17,17,0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       display: flex; flex-direction: column;
       align-items: center; justify-content: center;
       gap: 0; opacity: 0; pointer-events: none;
-      transform: translateY(-20px);
-      transition: opacity 0.35s, transform 0.35s;
+      transform: translateX(100%);
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
-    .mobile-menu.open { opacity: 1; pointer-events: auto; transform: translateY(0); }
-    .mobile-menu a {
+    .mobile-menu.open { opacity: 1; pointer-events: auto; transform: translateX(0); }
+    .mobile-menu-links {
+      list-style: none;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 0;
+      width: 100%; max-width: 320px;
+    }
+    .mobile-menu-links li { width: 100%; }
+    .mobile-menu-links a {
       display: block; text-decoration: none;
-      color: var(--cream); font-family: 'Playfair Display', serif;
-      font-size: 1.8rem; font-weight: 800;
+      color: var(--cream); font-family: 'Bebas Neue', sans-serif;
+      font-size: 2rem; letter-spacing: 0.04em;
       padding: 16px 0; text-align: center;
+      border-bottom: 1px solid rgba(245,240,232,0.06);
       transition: color 0.2s;
     }
-    .mobile-menu a:hover { color: var(--gold); }
+    .mobile-menu-links a:hover { color: var(--gold); }
+    .mobile-menu-bottom {
+      margin-top: 36px;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 16px;
+      width: 100%; max-width: 320px;
+    }
+    .mobile-menu-cta {
+      width: 100%; text-align: center;
+      background: var(--gold); color: var(--dark);
+      border: none; padding: 16px 24px;
+      border-radius: 3px; font-size: 0.85rem;
+      font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; text-decoration: none;
+      display: block; transition: background 0.2s;
+      font-family: 'Outfit', sans-serif;
+    }
+    .mobile-menu-cta:hover { background: var(--gold-light); }
 
     @media (max-width: 768px) {
       .nav-links { display: none; }
@@ -1051,12 +1078,16 @@
     </div>
   </nav>
 
-  <div class="mobile-menu" id="mobile-menu">
-    <a href="#carta" class="mm-link">Carta</a>
-    <a href="#cervezas" class="mm-link">Cervezas</a>
-    <a href="#horario" class="mm-link">Horario</a>
-    <a href="#opiniones" class="mm-link">Opiniones</a>
-    <a href="https://wa.me/34915326791" target="_blank" class="mm-link" style="color:var(--gold)">Reservar</a>
+  <div class="mobile-menu" id="mobile-menu" aria-hidden="true">
+    <ul class="mobile-menu-links">
+      <li><a href="#carta" class="mm-link">Carta</a></li>
+      <li><a href="#cervezas" class="mm-link">Cervezas</a></li>
+      <li><a href="#horario" class="mm-link">Horario</a></li>
+      <li><a href="#opiniones" class="mm-link">Opiniones</a></li>
+    </ul>
+    <div class="mobile-menu-bottom">
+      <a href="https://wa.me/34915326791" target="_blank" class="mobile-menu-cta mm-link">Reservar mesa</a>
+    </div>
   </div>
 
   <main id="main-content">
@@ -1383,16 +1414,29 @@
     // ─── HAMBURGER ───
     const hamburger = document.getElementById('hamburger');
     const mobileMenu = document.getElementById('mobile-menu');
+
+    function openMenu() {
+      hamburger.classList.add('open');
+      mobileMenu.classList.add('open');
+      hamburger.setAttribute('aria-expanded', 'true');
+      mobileMenu.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+      hamburger.classList.remove('open');
+      mobileMenu.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      mobileMenu.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
     hamburger.addEventListener('click', () => {
-      hamburger.classList.toggle('open');
-      mobileMenu.classList.toggle('open');
-      document.body.style.overflow = mobileMenu.classList.contains('open') ? 'hidden' : '';
+      mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
     });
     document.querySelectorAll('.mm-link').forEach(l => {
       l.addEventListener('click', () => {
-        hamburger.classList.remove('open');
-        mobileMenu.classList.remove('open');
-        document.body.style.overflow = '';
+        closeMenu();
       });
     });
 
