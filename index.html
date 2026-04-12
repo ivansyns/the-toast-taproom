@@ -670,7 +670,6 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 48px;
-      align-items: stretch;
     }
 
     .hours-content h2 {
@@ -1042,7 +1041,7 @@
       <div class="hero-left">
         <div class="hero-eyebrow">Malasaña, Madrid</div>
         <h1>The<br><span class="outline">Toast</span><br>Taproom.</h1>
-        <p class="hero-tagline">Cerveza artesanal. Brunch legendario.</p>
+        <p class="hero-tagline">Cerveza artesanal. Cocina fusión.</p>
         <div class="hero-ctas">
           <a href="https://wa.me/34915326791" target="_blank" class="btn-gold">Reservar mesa</a>
           <a href="#carta" class="btn-outline">Ver la carta</a>
@@ -1057,10 +1056,6 @@
         <div class="hero-tag">
           Grifos artesanales
           <strong>20+</strong>
-        </div>
-        <div class="hero-tag">
-          Cocina
-          <strong>Fusión</strong>
         </div>
       </div>
     </div>
@@ -1333,6 +1328,19 @@
   </footer>
 
   <script>
+    // ─── SYNC MAP HEIGHT TO HOURS CONTENT ───
+    function syncMapHeight() {
+      const content = document.querySelector('.hours-content');
+      const map = document.querySelector('.hours-map');
+      if (content && map && window.innerWidth > 900) {
+        map.style.height = content.offsetHeight + 'px';
+      } else if (map) {
+        map.style.height = '';
+      }
+    }
+    syncMapHeight();
+    window.addEventListener('resize', syncMapHeight, { passive: true });
+
     // ─── NAV SCROLL ───
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => {
