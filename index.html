@@ -93,15 +93,15 @@
     }
 
     .nav-logo {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem;
-      font-weight: 900;
-      color: var(--cream);
+      display: flex;
+      align-items: center;
       text-decoration: none;
-      letter-spacing: -0.02em;
     }
 
-    .nav-logo .the { font-weight: 400; opacity: 0.6; font-size: 0.85em; }
+    .nav-logo svg {
+      display: block;
+      border-radius: 8px;
+    }
 
     .nav-links {
       display: flex;
@@ -825,11 +825,15 @@
       margin-bottom: 48px;
     }
 
-    .footer-brand-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.3rem; font-weight: 900;
-      color: var(--cream);
-      margin-bottom: 12px;
+    .footer-brand-logo {
+      display: inline-block;
+      text-decoration: none;
+      margin-bottom: 16px;
+    }
+
+    .footer-brand-logo svg {
+      display: block;
+      border-radius: 10px;
     }
 
     .footer-desc {
@@ -1033,7 +1037,7 @@
   <!-- ─── NAV ─── -->
   <nav id="nav">
     <div class="nav-inner">
-      <a href="#" class="nav-logo"><span class="the">The </span>Toast Taproom</a>
+      <a href="#" class="nav-logo"><svg width="36" height="36" viewBox="0 0 100 100" aria-label="The Toast Taproom"><rect width="100" height="100" rx="12" fill="#1A1A1A"/><text x="50%" y="50%" font-family="Arial Black,sans-serif" font-weight="900" font-size="52" fill="#C8973E" text-anchor="middle" dominant-baseline="central" letter-spacing="-2">TT</text></svg></a>
       <ul class="nav-links">
         <li><a href="#carta">Carta</a></li>
         <li><a href="#cervezas">Cervezas</a></li>
@@ -1318,7 +1322,7 @@
     <div class="container">
       <div class="footer-grid">
         <div>
-          <div class="footer-brand-name">The Toast Taproom</div>
+          <a href="#" class="footer-brand-logo"><svg width="52" height="52" viewBox="0 0 100 100" aria-label="The Toast Taproom"><rect width="100" height="100" rx="12" fill="#1A1A1A"/><text x="50%" y="50%" font-family="Arial Black,sans-serif" font-weight="900" font-size="52" fill="#C8973E" text-anchor="middle" dominant-baseline="central" letter-spacing="-2">TT</text></svg></a>
           <p class="footer-desc">Cervecería artesanal y brunch en Malasaña, Madrid. +20 grifos de cerveza española, fusión americano-mexicana y el ambiente que buscas.</p>
         </div>
         <div class="footer-col">
