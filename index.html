@@ -935,11 +935,22 @@
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 900px) {
-      .hero { min-height: 560px; }
-      .hero-inner { grid-template-columns: 1fr; gap: 24px; }
-      .hero h1 { font-size: clamp(3.8rem, 15vw, 5.5rem); }
-      .hero-right { flex-direction: row; flex-wrap: wrap; align-items: flex-start; justify-content: flex-start; }
-      .hero-tag { text-align: left; }
+      .hero { min-height: 100vh; }
+      .hero-inner {
+        grid-template-columns: 1fr auto;
+        gap: 20px;
+        align-items: flex-end;
+        padding: 0 clamp(20px, 5vw, 40px);
+      }
+      .hero h1 { font-size: clamp(3.5rem, 12vw, 5.5rem); }
+      .hero-right {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 10px;
+        padding-bottom: 0;
+      }
+      .hero-tag { text-align: right; padding: 8px 14px; }
+      .hero-tag strong { font-size: 1.3rem; }
       .features-grid { grid-template-columns: 1fr; }
       .menu-grid { grid-template-columns: 1fr; }
       .beer-inner { grid-template-columns: 1fr; gap: 48px; }
@@ -954,13 +965,25 @@
 
     @media (max-width: 600px) {
       body { font-size: 16px; }
-      .hero h1 { font-size: clamp(2rem, 8vw, 2.8rem); }
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero h1 { font-size: clamp(3.2rem, 14vw, 4.5rem); }
+      .hero-right {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .hero-tag { text-align: left; padding: 7px 12px; }
+      .hero-tag strong { font-size: 1.1rem; }
+      .hero-ctas { flex-direction: column; width: 100%; }
+      .hero-ctas .btn-gold,
+      .hero-ctas .btn-outline { width: 100%; justify-content: center; }
       .footer-grid { grid-template-columns: 1fr; text-align: center; }
       .footer-desc { max-width: 100%; }
       .footer-col ul { align-items: center; }
       .footer-bottom { flex-direction: column; text-align: center; }
       .footer-socials { justify-content: center; }
-      .hero-tag strong { font-size: 1.3rem; }
       .tap-count-badge { width: 72px; height: 72px; top: -10px; right: -10px; }
       .tap-count-badge .num { font-size: 1.3rem; }
     }
