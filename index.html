@@ -1650,7 +1650,10 @@
 
       function setProgressTarget(p) {
         const clamped = p < 0 ? 0 : p > 1 ? 1 : p;
-        targetScale = SCALE_MIN + (SCALE_MAX - SCALE_MIN) * clamped;
+        // Zoom completes at ~50% scroll progress — feels cinematic
+        // rather than dragging all the way to the unpin point.
+        const zoomP = clamped < 0.5 ? clamped * 2 : 1;
+        targetScale = SCALE_MIN + (SCALE_MAX - SCALE_MIN) * zoomP;
         if (!rafId) rafId = requestAnimationFrame(tick);
       }
 
