@@ -1703,6 +1703,43 @@
         }
       }
 
+      // ── Smooth frame interpolation ───────────────────────────────
+      // Scroll drives `targetFrame`. A rAF loop lerps `displayFrame`
+      // toward it each tick and settles when close, so the dolly-in
+      // glides instead of jumping frame-to-frame on scroll events.
+      const LERP = 0.15;
+      const SETTLE = 0.03;
+      let targetFrame  = 0;
+      let displayFrame = 0;
+      let lastDrawn    = -1;
+      let rafId        = 0;
+
+      function paintFrame(i) {
+        if (i !== lastDrawn && frames[i]) {
+          drawFrame(i);
+          lastDrawn = i;
+        }
+      }
+
+      function tick() {
+        const delta = targetFrame - displayFrame;
+        if (Math.abs(delta) < SETTLE) {
+          displayFrame = targetFrame;
+          paintFrame(Math.round(displayFrame));
+          rafId = 0;
+          return;
+        }
+        displayFrame += delta * LERP;
+        paintFrame(Math.round(displayFrame));
+        rafId = requestAnimationFrame(tick);
+      }
+
+      function setProgressTarget(p) {
+        const clamped = p < 0 ? 0 : p > 1 ? 1 : p;
+        targetFrame = clamped * (FRAME_COUNT - 1);
+        if (!rafId) rafId = requestAnimationFrame(tick);
+      }
+
       function setupScroll() {
         if (!window.gsap || !window.ScrollTrigger) {
           return setTimeout(setupScroll, 30);
@@ -1716,17 +1753,11 @@
           pin: true,
           pinSpacing: true,
           anticipatePin: 1,
-          scrub: 0.4,
+          scrub: true,       // direct scroll→progress; lerp handles smoothing
           invalidateOnRefresh: true,
           onUpdate: (self) => {
             const p = self.progress;
-            const idx = Math.min(
-              FRAME_COUNT - 1,
-              Math.round(p * (FRAME_COUNT - 1))
-            );
-            if (idx !== currentFrame && frames[idx]) {
-              requestAnimationFrame(() => drawFrame(idx));
-            }
+            setProgressTarget(p);
             updateReveals(p);
           },
         });
