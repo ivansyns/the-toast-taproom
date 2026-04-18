@@ -11,6 +11,7 @@
   <meta property="og:description" content="20+ grifos de cerveza artesanal española, cocina fusión y el mejor brunch de Madrid. Ven a Malasaña." />
   <meta property="og:type" content="restaurant" />
   <meta name="robots" content="noindex, nofollow" />
+  <link rel="preload" as="image" href="assets/tt1.webp" fetchpriority="high" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
@@ -251,8 +252,8 @@
       transform-origin: center center;
       transform: scale(1);
       will-change: transform;
-      /* Slow cinematic push-in on page load (scale 1 → 1.15 over 4.8s) */
-      animation: heroZoomIn 4.8s cubic-bezier(0.4, 0, 0.6, 1) 0s both;
+      /* Cinematic drift-forward — 7s, easeOutQuad (GSAP power1.out) */
+      animation: heroZoomIn 7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s both;
     }
 
     @keyframes heroZoomIn {
@@ -260,9 +261,9 @@
       to   { transform: scale(1.15); }
     }
 
-    /* Hero content cascade — each element fades up on page load, staggered */
+    /* Hero content cascade — long, slow materialization on page load */
     @keyframes heroIntro {
-      from { opacity: 0; transform: translateY(20px); }
+      from { opacity: 0; transform: translateY(12px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
@@ -275,20 +276,21 @@
     .hero .hero-sub,
     .hero .hero-tag {
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(12px);
       will-change: opacity, transform;
-      animation: heroIntro 1.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+      /* 2.2s duration, easeOutCubic (GSAP power2.out), 450ms stagger */
+      animation: heroIntro 2.2s cubic-bezier(0.33, 1, 0.68, 1) both;
     }
 
-    .hero .hero-eyebrow { animation-delay: 0.15s; }
-    .hero .word-the     { animation-delay: 0.40s; }
-    .hero .word-toast   { animation-delay: 0.65s; }
-    .hero .word-taproom { animation-delay: 0.90s; }
-    .hero .hero-tagline { animation-delay: 1.15s; }
-    .hero .hero-ctas    { animation-delay: 1.40s; }
-    .hero .hero-sub     { animation-delay: 1.65s; }
-    .hero .hero-tag:nth-of-type(1) { animation-delay: 1.55s; }
-    .hero .hero-tag:nth-of-type(2) { animation-delay: 1.80s; }
+    .hero .hero-eyebrow { animation-delay: 0.40s; }
+    .hero .word-the     { animation-delay: 0.85s; }
+    .hero .word-toast   { animation-delay: 1.30s; }
+    .hero .word-taproom { animation-delay: 1.75s; }
+    .hero .hero-tagline { animation-delay: 2.20s; }
+    .hero .hero-ctas    { animation-delay: 2.65s; }
+    .hero .hero-sub     { animation-delay: 3.10s; }
+    .hero .hero-tag:nth-of-type(1) { animation-delay: 3.10s; }
+    .hero .hero-tag:nth-of-type(2) { animation-delay: 3.55s; }
 
     /* Gradient overlay — dark left, lighter right */
     .hero-overlay {
@@ -1020,11 +1022,6 @@
     .stagger > *:nth-child(5) { transition-delay: 320ms; }
     .stagger > *:nth-child(6) { transition-delay: 400ms; }
 
-    /* ─── HERO REVEAL (scroll-driven, hidden on load) ─── */
-    .hero-reveal {
-      opacity: 0;
-      will-change: opacity;
-    }
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 900px) {
@@ -1135,7 +1132,6 @@
       }
       .fade-in { opacity: 1; transform: none; }
       .hero-bg-img img { transform: none !important; animation: none !important; }
-      .hero-reveal { opacity: 1 !important; }
       .hero .hero-eyebrow,
       .hero .word-the, .hero .word-toast, .hero .word-taproom,
       .hero .hero-tagline, .hero .hero-ctas,
@@ -1193,25 +1189,25 @@
 
     <div class="hero-inner">
       <div class="hero-left">
-        <div class="hero-eyebrow hero-reveal" data-reveal="eyebrow">Malasaña, Madrid</div>
+        <div class="hero-eyebrow">Malasaña, Madrid</div>
         <h1>
           <span class="word-the">The</span><br>
           <span class="outline word-toast">Toast</span><br>
-          <span class="word-taproom hero-reveal" data-reveal="taproom">Taproom</span>
+          <span class="word-taproom">Taproom</span>
         </h1>
-        <p class="hero-tagline hero-reveal" data-reveal="tagline">Cerveza artesanal. Cocina fusión.</p>
-        <div class="hero-ctas hero-reveal" data-reveal="bottom">
+        <p class="hero-tagline">Cerveza artesanal. Cocina fusión.</p>
+        <div class="hero-ctas">
           <a href="https://wa.me/34915326791" target="_blank" class="btn-gold">Reservar mesa</a>
           <a href="#carta" class="btn-outline">Ver la carta</a>
         </div>
-        <span class="hero-sub hero-reveal" data-reveal="bottom">C/ San Vicente Ferrer 33, Madrid</span>
+        <span class="hero-sub">C/ San Vicente Ferrer 33, Madrid</span>
       </div>
       <div class="hero-right">
-        <div class="hero-tag hero-reveal" data-reveal="tags">
+        <div class="hero-tag">
           Google Reviews
           <strong><span class="gold">4.8</span> / 5</strong>
         </div>
-        <div class="hero-tag hero-reveal" data-reveal="tags">
+        <div class="hero-tag">
           Grifos artesanales
           <strong>20+</strong>
         </div>
@@ -1783,7 +1779,6 @@
             end:   '+=200%',
             pin: true,
             pinSpacing: true,
-            anticipatePin: 1,
             scrub: true,
             invalidateOnRefresh: true,
             onUpdate: (self) => setProgressTarget(self.progress),
