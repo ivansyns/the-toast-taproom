@@ -231,27 +231,32 @@
       overflow: hidden;
     }
 
-    /* Full-bleed canvas background (scroll-driven frame animation) */
+    /* Full-bleed image background (scroll-driven zoom) */
+    /* inset:-2px overscan prevents any subpixel rounding strip from showing
+       between the image/overlay and the hero bounds. .hero has overflow:hidden
+       so nothing leaks past the section. */
     .hero-bg-img {
       position: absolute;
-      inset: 0;
+      inset: -2px;
       z-index: 0;
       background: #080604;
+      overflow: hidden;
     }
 
-    .hero-bg-img canvas {
+    .hero-bg-img img {
       width: 100%;
       height: 100%;
+      object-fit: cover;
       display: block;
-      opacity: 0;
-      transition: opacity 0.5s ease-out;
+      transform-origin: center center;
+      transform: scale(1);
+      will-change: transform;
     }
-    .hero-bg-img canvas.ready { opacity: 1; }
 
     /* Gradient overlay — dark left, lighter right */
     .hero-overlay {
       position: absolute;
-      inset: 0;
+      inset: -2px;
       background:
         radial-gradient(ellipse 80% 70% at 60% 80%, rgba(212,168,83,0.12) 0%, transparent 55%),
         radial-gradient(ellipse 50% 50% at 20% 30%, rgba(212,168,83,0.04) 0%, transparent 45%),
@@ -1092,7 +1097,7 @@
         scroll-behavior: auto !important;
       }
       .fade-in { opacity: 1; transform: none; }
-      .hero-bg-img canvas { opacity: 1 !important; }
+      .hero-bg-img img { transform: none !important; }
       .hero-reveal { opacity: 1 !important; }
     }
   </style>
@@ -1134,9 +1139,9 @@
 
   <!-- ─── HERO ─── -->
   <section class="hero">
-    <!-- Full-bleed canvas background (scroll-driven dolly-in) -->
+    <!-- Full-bleed image background (scroll-driven zoom) -->
     <div class="hero-bg-img">
-      <canvas id="hero-canvas" aria-hidden="true"></canvas>
+      <img id="hero-bg" src="assets/tt1.webp" alt="Interior del The Toast Taproom" fetchpriority="high" />
     </div>
     <!-- Gradient overlay -->
     <div class="hero-overlay" aria-hidden="true"></div>
@@ -1585,99 +1590,13 @@
       document.querySelectorAll('.fade-in:not(.visible)').forEach(el => el.classList.add('visible'));
     }, 2000);
 
-    // ─── HERO SCROLL-DRIVEN FRAME ANIMATION ───
+    // ─── HERO SCROLL-DRIVEN ZOOM + TEXT REVEAL ───
     (function initHeroScroll() {
-      const FRAME_COUNT = 121;
-      const FRAME_PATH = (i) => `assets/frames/frame_${String(i).padStart(4, '0')}.webp`;
-
       const hero   = document.querySelector('.hero');
-      const canvas = document.getElementById('hero-canvas');
-      if (!hero || !canvas) return;
-
-      const ctx = canvas.getContext('2d', { alpha: false });
-      const frames = new Array(FRAME_COUNT);
-      let currentFrame = -1;
-      let dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const bgImg  = document.getElementById('hero-bg');
+      if (!hero || !bgImg) return;
 
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      function resizeCanvas() {
-        dpr = Math.min(window.devicePixelRatio || 1, 2);
-        const rect = canvas.getBoundingClientRect();
-        const w = rect.width || window.innerWidth;
-        const h = rect.height || window.innerHeight;
-        canvas.width  = Math.round(w * dpr);
-        canvas.height = Math.round(h * dpr);
-        canvas.style.width  = w + 'px';
-        canvas.style.height = h + 'px';
-        if (currentFrame >= 0 && frames[currentFrame]) {
-          drawFrame(currentFrame, true);
-        }
-      }
-
-      function drawFrame(i, force) {
-        const img = frames[i];
-        if (!img) return;
-        const cw = canvas.width, ch = canvas.height;
-        ctx.fillStyle = '#080604';
-        ctx.fillRect(0, 0, cw, ch);
-        const iw = img.naturalWidth, ih = img.naturalHeight;
-        const scale = Math.max(cw / iw, ch / ih);
-        const dw = iw * scale, dh = ih * scale;
-        const dx = (cw - dw) / 2, dy = (ch - dh) / 2;
-        ctx.drawImage(img, dx, dy, dw, dh);
-        if (force !== true) currentFrame = i;
-      }
-
-      function loadImage(i) {
-        return new Promise((resolve) => {
-          const img = new Image();
-          img.decoding = 'async';
-          img.onload  = () => resolve(img);
-          img.onerror = () => resolve(null);
-          img.src = FRAME_PATH(i + 1);
-        });
-      }
-
-      // Reduced motion: static first frame, no pin, no scroll binding
-      if (reduce) {
-        (async () => {
-          const first = await loadImage(0);
-          if (first) {
-            frames[0] = first;
-            resizeCanvas();
-            drawFrame(0);
-            canvas.classList.add('ready');
-          }
-        })();
-        window.addEventListener('resize', resizeCanvas, { passive: true });
-        return;
-      }
-
-      // Preload all frames; first one blocks so we can paint immediately
-      async function preloadFrames() {
-        const first = await loadImage(0);
-        if (first) {
-          frames[0] = first;
-          resizeCanvas();
-          drawFrame(0);
-          canvas.classList.add('ready');
-        }
-        const BATCH = 12;
-        const indices = [];
-        for (let i = 1; i < FRAME_COUNT; i++) indices.push(i);
-        while (indices.length) {
-          const chunk = indices.splice(0, BATCH);
-          await Promise.all(chunk.map(async (i) => {
-            const img = await loadImage(i);
-            if (img) frames[i] = img;
-          }));
-        }
-        // Tell ScrollTrigger to recompute in case layout changed during load
-        if (window.ScrollTrigger) ScrollTrigger.refresh();
-      }
-      preloadFrames();
-      window.addEventListener('resize', resizeCanvas, { passive: true });
 
       // Scroll-triggered reveal buckets. Each element fades opacity 0 → 1
       // across the given [start, end] progress range. Simple linear fade.
@@ -1703,40 +1622,35 @@
         }
       }
 
-      // ── Smooth frame interpolation ───────────────────────────────
-      // Scroll drives `targetFrame`. A rAF loop lerps `displayFrame`
-      // toward it each tick and settles when close, so the dolly-in
-      // glides instead of jumping frame-to-frame on scroll events.
-      const LERP = 0.15;
-      const SETTLE = 0.03;
-      let targetFrame  = 0;
-      let displayFrame = 0;
-      let lastDrawn    = -1;
-      let rafId        = 0;
+      if (reduce) return;
 
-      function paintFrame(i) {
-        if (i !== lastDrawn && frames[i]) {
-          drawFrame(i);
-          lastDrawn = i;
-        }
-      }
+      // ── Smooth scroll-driven zoom 1.00 → 1.15 ────────────────────
+      // Scroll drives `targetScale`. A rAF loop lerps `displayScale`
+      // toward it so the zoom glides instead of snapping per scroll event.
+      const SCALE_MIN = 1.00;
+      const SCALE_MAX = 1.30;
+      const LERP = 0.15;
+      const SETTLE = 0.0005;
+      let targetScale  = SCALE_MIN;
+      let displayScale = SCALE_MIN;
+      let rafId = 0;
 
       function tick() {
-        const delta = targetFrame - displayFrame;
+        const delta = targetScale - displayScale;
         if (Math.abs(delta) < SETTLE) {
-          displayFrame = targetFrame;
-          paintFrame(Math.round(displayFrame));
+          displayScale = targetScale;
+          bgImg.style.transform = `scale(${displayScale.toFixed(4)})`;
           rafId = 0;
           return;
         }
-        displayFrame += delta * LERP;
-        paintFrame(Math.round(displayFrame));
+        displayScale += delta * LERP;
+        bgImg.style.transform = `scale(${displayScale.toFixed(4)})`;
         rafId = requestAnimationFrame(tick);
       }
 
       function setProgressTarget(p) {
         const clamped = p < 0 ? 0 : p > 1 ? 1 : p;
-        targetFrame = clamped * (FRAME_COUNT - 1);
+        targetScale = SCALE_MIN + (SCALE_MAX - SCALE_MIN) * clamped;
         if (!rafId) rafId = requestAnimationFrame(tick);
       }
 
@@ -1749,7 +1663,7 @@
         ScrollTrigger.create({
           trigger: hero,
           start: 'top top',
-          end:   '+=300%',   // 3 extra viewports of scroll while pinned
+          end:   '+=300%',
           pin: true,
           pinSpacing: true,
           anticipatePin: 1,
