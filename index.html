@@ -7,10 +7,61 @@
   <title>The Toast Taproom — Cerveza Artesanal y Brunch en Malasaña, Madrid</title>
   <meta name="description" content="The Toast Taproom en Malasaña, Madrid. 20+ grifos de cerveza artesanal española, cocina fusión americano-mexicana y el mejor brunch de fin de semana. Calle San Vicente Ferrer 33." />
   <meta name="keywords" content="The Toast Taproom, cerveza artesanal Madrid, brunch Malasaña, restaurante Malasaña, craft beer Madrid, cervecería artesanal, brunch Madrid" />
-  <meta property="og:title" content="The Toast Taproom — Cerveza Artesanal y Brunch en Malasaña" />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Open Graph / social sharing -->
+  <meta property="og:title" content="The Toast Taproom — Cerveza Artesanal y Brunch en Malasaña, Madrid" />
   <meta property="og:description" content="20+ grifos de cerveza artesanal española, cocina fusión y el mejor brunch de Madrid. Ven a Malasaña." />
+  <meta property="og:image" content="https://thetoasttaproom.com/assets/tt1.webp" />
+  <meta property="og:url" content="https://thetoasttaproom.com" />
   <meta property="og:type" content="restaurant" />
-  <meta name="robots" content="noindex, nofollow" />
+  <meta property="og:locale" content="es_ES" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="The Toast Taproom — Cerveza Artesanal y Brunch en Malasaña" />
+  <meta name="twitter:description" content="20+ grifos de cerveza artesanal española, cocina fusión y el mejor brunch de Madrid." />
+  <meta name="twitter:image" content="https://thetoasttaproom.com/assets/tt1.webp" />
+
+  <link rel="canonical" href="https://thetoasttaproom.com" />
+
+  <!-- JSON-LD structured data (Restaurant) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "The Toast Taproom",
+    "image": "https://thetoasttaproom.com/assets/tt1.webp",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Calle San Vicente Ferrer 33",
+      "addressLocality": "Madrid",
+      "addressRegion": "Madrid",
+      "postalCode": "28004",
+      "addressCountry": "ES"
+    },
+    "telephone": "+34 915 32 67 91",
+    "url": "https://thetoasttaproom.com",
+    "servesCuisine": ["Cerveza artesanal", "Cocina fusión americano-mexicana", "Brunch"],
+    "priceRange": "€€",
+    "openingHoursSpecification": [
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday"],  "opens": "18:00", "closes": "00:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Wednesday", "Thursday"], "opens": "18:00", "closes": "01:00" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Friday"],    "opens": "12:00", "closes": "02:30" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Saturday"],  "opens": "10:00", "closes": "02:30" },
+      { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Sunday"],    "opens": "10:00", "closes": "00:00" }
+    ],
+    "aggregateRating": {
+      "@type": "AggregateRating",
+      "ratingValue": "4.8",
+      "reviewCount": "2600"
+    },
+    "sameAs": [
+      "https://www.instagram.com/thetoasttaproom/",
+      "https://www.facebook.com/thetoastmalasana/",
+      "https://untappd.com/v/the-toast-taproom/10010017"
+    ]
+  }
+  </script>
+
   <link rel="preload" as="image" href="assets/tt1.webp" fetchpriority="high" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -121,12 +172,13 @@
       font-weight: 500;
       padding: 8px 16px;
       border-radius: 999px;
-      transition: color 0.2s, background 0.2s;
+      transition: color 150ms ease, background 150ms ease;
       letter-spacing: 0.04em;
       text-transform: uppercase;
     }
 
     .nav-links a:hover {
+      transition-duration: 0s;
       color: var(--gold);
       background: rgba(212,168,83,0.08);
     }
@@ -406,6 +458,7 @@
 
     .hero-tag .gold { color: var(--gold); }
 
+    /* Buttons & links — Emil rule: 150ms exit, instant on hover */
     .btn-gold {
       background: var(--gold);
       color: var(--dark);
@@ -414,7 +467,7 @@
       border-radius: 3px;
       font-size: 0.78rem; font-weight: 600;
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.25s ease, background 0.2s ease;
+      transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
       text-decoration: none;
       display: inline-flex; align-items: center; gap: 8px;
       box-shadow: 0 4px 24px rgba(212,168,83,0.3);
@@ -423,6 +476,7 @@
       text-transform: uppercase;
     }
     .btn-gold:hover {
+      transition-duration: 0s;
       transform: translateY(-2px);
       box-shadow: 0 8px 32px rgba(212,168,83,0.45);
       background: var(--gold-light);
@@ -436,7 +490,7 @@
       border-radius: 3px;
       font-size: 0.78rem; font-weight: 500;
       cursor: pointer;
-      transition: transform 0.2s ease, border-color 0.25s ease, color 0.25s ease, background 0.25s ease;
+      transition: transform 150ms ease, border-color 150ms ease, color 150ms ease, background 150ms ease;
       text-decoration: none;
       display: inline-flex; align-items: center; gap: 8px;
       font-family: 'Outfit', sans-serif;
@@ -444,6 +498,7 @@
       text-transform: uppercase;
     }
     .btn-outline:hover {
+      transition-duration: 0s;
       transform: translateY(-2px);
       border-color: var(--gold);
       color: var(--gold);
@@ -503,7 +558,7 @@
     .features-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
+      gap: 28px;
       align-items: stretch;
     }
 
@@ -514,8 +569,11 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-      will-change: transform, opacity;
+      transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-color 0.2s ease,
+                  box-shadow 0.25s ease;
+      will-change: transform;
+      cursor: pointer;
     }
 
     .feature-card-img {
@@ -528,15 +586,15 @@
       width: 100%; height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.6s ease-out;
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
     .feature-card:hover .feature-card-img img {
-      transform: scale(1.04);
+      transform: scale(1.05);
     }
 
     .feature-card-body {
-      padding: 28px 24px 32px;
+      padding: 36px 32px 40px;
       flex: 1;
       display: flex;
       flex-direction: column;
@@ -547,9 +605,14 @@
     }
 
     .feature-card:hover {
-      transform: scale(1.02);
-      border-color: rgba(212,168,83,0.3);
+      transform: translateY(-3px);
+      border-color: rgba(212,168,83,0.32);
       box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+    }
+
+    .feature-card:active {
+      transform: translateY(0) scale(0.98);
+      transition-duration: 0.08s;
     }
 
     .feature-icon {
@@ -559,19 +622,20 @@
       border: 1px solid rgba(212,168,83,0.15);
       display: flex; align-items: center; justify-content: center;
       color: var(--gold);
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
     .feature-card h3 {
-      font-size: 1.1rem;
-      margin-bottom: 10px;
+      font-size: 1.25rem;
+      line-height: 1.3;
+      margin-bottom: 14px;
       color: var(--cream);
     }
 
     .feature-card p {
-      font-size: 0.88rem;
+      font-size: 0.92rem;
       color: var(--text-muted);
-      line-height: 1.65;
+      line-height: 1.7;
     }
 
     /* ─── MENU HIGHLIGHTS ─── */
@@ -591,32 +655,56 @@
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(212,168,83,0.1);
       border-radius: 16px;
-      padding: 28px 24px;
-      display: flex; gap: 16px;
-      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-      will-change: transform, opacity;
+      padding: 16px;
+      display: flex; gap: 20px;
+      align-items: stretch;
+      transition: transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-color 0.2s ease,
+                  background 0.2s ease,
+                  box-shadow 0.25s ease;
+      will-change: transform;
     }
 
     .menu-card:hover {
-      transform: scale(1.02);
-      border-color: rgba(212,168,83,0.25);
-      background: rgba(212,168,83,0.04);
+      transform: translateY(-2px);
+      border-color: rgba(212,168,83,0.28);
+      background: rgba(212,168,83,0.045);
+      box-shadow: 0 12px 32px rgba(0,0,0,0.25);
     }
 
-    .menu-emoji {
+    .menu-card-img {
       flex-shrink: 0;
-      width: 56px; height: 56px;
-      background: rgba(212,168,83,0.08);
-      border-radius: 14px;
-      display: flex; align-items: center; justify-content: center;
-      color: var(--gold);
+      width: 128px; height: 128px;
+      border-radius: 12px;
+      overflow: hidden;
+      background: var(--warm-gray);
+      position: relative;
+    }
+
+    .menu-card-img img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .menu-card:hover .menu-card-img img {
+      transform: scale(1.06);
+    }
+
+    .menu-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-width: 0;
     }
 
     .menu-info h3 {
-      font-size: 1rem; font-weight: 700;
+      font-size: 1.05rem; font-weight: 700;
       font-family: 'Outfit', sans-serif;
       color: var(--cream);
-      margin-bottom: 4px;
+      margin-bottom: 6px;
+      letter-spacing: -0.005em;
     }
 
     .menu-info p {
@@ -626,16 +714,24 @@
     }
 
     .menu-tag {
-      display: inline-block;
-      font-size: 0.65rem;
+      align-self: flex-start;
+      font-size: 0.64rem;
       font-weight: 600;
       color: var(--gold);
       background: rgba(212,168,83,0.1);
-      padding: 2px 8px;
+      padding: 3px 10px;
       border-radius: 100px;
-      margin-top: 8px;
-      letter-spacing: 0.06em;
+      margin-top: 10px;
+      letter-spacing: 0.1em;
       text-transform: uppercase;
+    }
+
+    /* Menu cards — mobile overrides (placed after all base rules) */
+    @media (max-width: 600px) {
+      .menu-card { padding: 14px; gap: 14px; }
+      .menu-card-img { width: 92px; height: 92px; border-radius: 10px; }
+      .menu-info h3 { font-size: 1rem; }
+      .menu-info p { font-size: 0.84rem; }
     }
 
     /* ─── BEER SECTION ─── */
@@ -962,9 +1058,9 @@
       text-decoration-color: rgba(245,240,232,0.15);
       color: rgba(245,240,232,0.5);
       font-size: 0.82rem;
-      transition: color 0.2s, text-decoration-color 0.2s;
+      transition: color 150ms ease, text-decoration-color 150ms ease;
     }
-    .footer-col a:hover { color: var(--gold); text-decoration-color: var(--gold); }
+    .footer-col a:hover { transition-duration: 0s; color: var(--gold); text-decoration-color: var(--gold); }
 
     .footer-bottom {
       border-top: 1px solid rgba(245,240,232,0.06);
@@ -991,22 +1087,23 @@
       border: 1px solid rgba(245,240,232,0.08);
       display: flex; align-items: center; justify-content: center;
       color: rgba(245,240,232,0.5);
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
+      transition: background 150ms ease, color 150ms ease, border-color 150ms ease;
       text-decoration: none;
     }
     .footer-socials a:hover {
+      transition-duration: 0s;
       background: rgba(212,168,83,0.12);
       color: var(--gold);
       border-color: rgba(212,168,83,0.25);
     }
     .footer-socials svg { width: 16px; height: 16px; }
 
-    /* ─── SCROLL REVEAL ─── */
+    /* ─── SCROLL REVEAL (Emil rules: small distance, quick, subtle) ─── */
     .fade-in {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(8px);
+      transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
       will-change: transform, opacity;
     }
     .fade-in.visible {
@@ -1014,13 +1111,13 @@
       transform: translateY(0);
     }
 
-    /* ─── STAGGER DELAYS ─── */
+    /* ─── STAGGER DELAYS — 50ms between items ─── */
     .stagger > *:nth-child(1) { transition-delay: 0ms; }
-    .stagger > *:nth-child(2) { transition-delay: 80ms; }
-    .stagger > *:nth-child(3) { transition-delay: 160ms; }
-    .stagger > *:nth-child(4) { transition-delay: 240ms; }
-    .stagger > *:nth-child(5) { transition-delay: 320ms; }
-    .stagger > *:nth-child(6) { transition-delay: 400ms; }
+    .stagger > *:nth-child(2) { transition-delay: 50ms; }
+    .stagger > *:nth-child(3) { transition-delay: 100ms; }
+    .stagger > *:nth-child(4) { transition-delay: 150ms; }
+    .stagger > *:nth-child(5) { transition-delay: 200ms; }
+    .stagger > *:nth-child(6) { transition-delay: 250ms; }
 
 
     /* ─── RESPONSIVE ─── */
@@ -1085,13 +1182,14 @@
       /* Feature section heading: use Bebas for readability on dark bg */
       .section-header h2 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.01em; line-height: 1; font-weight: 400; font-size: clamp(2rem, 8vw, 2.6rem); }
 
-      /* Footer: consistently left-aligned on mobile */
-      .footer-grid { grid-template-columns: 1fr; text-align: left; }
+      /* Footer: centered on mobile */
+      .footer-grid { grid-template-columns: 1fr; text-align: center; }
+      .footer-grid > div { display: flex; flex-direction: column; align-items: center; }
       .footer-desc { max-width: 100%; }
-      .footer-col ul { align-items: flex-start; }
-      .footer-col h4 { text-align: left; }
-      .footer-bottom { flex-direction: column; text-align: left; }
-      .footer-socials { justify-content: flex-start; }
+      .footer-col ul { align-items: center; }
+      .footer-col h4 { text-align: center; }
+      .footer-bottom { flex-direction: column; text-align: center; justify-content: center; }
+      .footer-socials { justify-content: center; }
       .tap-count-badge { width: 72px; height: 72px; top: -10px; right: -10px; }
       .tap-count-badge .num { font-size: 1.3rem; }
     }
@@ -1240,7 +1338,7 @@
           </div>
         </div>
         <div class="feature-card fade-in">
-          <div class="feature-card-img"><img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=600&h=340&fit=crop&crop=center" alt="Mesa de brunch con huevos, tostadas y café" width="600" height="340" loading="lazy" /></div>
+          <div class="feature-card-img"><img src="https://images.unsplash.com/photo-1482049016688-2d3e1b311543?w=600&h=340&fit=crop&crop=center" alt="Huevos con aguacate sobre tabla de madera oscura, estilo brunch de The Toast Taproom" width="600" height="340" loading="lazy" /></div>
           <div class="feature-card-body">
             <div class="feature-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"/><path d="M12 11v11"/><path d="m19 3-7 8-7-8Z"/></svg></div>
             <h3>Brunch de Fin de Semana</h3>
@@ -1261,7 +1359,7 @@
       </div>
       <div class="menu-grid stagger">
         <div class="menu-card fade-in">
-          <div class="menu-emoji"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l3 7h7l-5.5 4.5 2 7L12 16l-6.5 4.5 2-7L2 9h7z"/></svg></div>
+          <div class="menu-card-img"><img src="https://images.unsplash.com/photo-1510693206972-df098062cb71?w=320&h=320&fit=crop" alt="Chilaquiles en sartén de hierro con queso y salsa" width="128" height="128" loading="lazy" /></div>
           <div class="menu-info">
             <h3>Chilaquiles Clásicos</h3>
             <p>Nuestro plato estrella. Tortilla crujiente, salsa verde, pollo deshilachado, crema agria y queso fresco.</p>
@@ -1269,14 +1367,14 @@
           </div>
         </div>
         <div class="menu-card fade-in">
-          <div class="menu-emoji"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h18M3 15h18"/><path d="M5 11a7 7 0 0 1 14 0"/><path d="M5 15a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2"/></svg></div>
+          <div class="menu-card-img"><img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=320&h=320&fit=crop" alt="Smash burger con cheddar fundido sobre pan brioche" width="128" height="128" loading="lazy" /></div>
           <div class="menu-info">
             <h3>Smash Burger con Bacon</h3>
             <p>Carne smash a la plancha, bacon ahumado, cheddar fundido, salsa secreta y pan brioche artesano.</p>
           </div>
         </div>
         <div class="menu-card fade-in">
-          <div class="menu-emoji"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <div class="menu-card-img"><img src="https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=320&h=320&fit=crop" alt="Huevo sobre tostada con aguacate y tomate asado" width="128" height="128" loading="lazy" /></div>
           <div class="menu-info">
             <h3>Eggs Benedict Aguacate</h3>
             <p>Muffin inglés tostado, huevo pochado perfecto, aguacate, bacon crujiente y salsa holandesa casera.</p>
@@ -1284,7 +1382,7 @@
           </div>
         </div>
         <div class="menu-card fade-in">
-          <div class="menu-emoji"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg></div>
+          <div class="menu-card-img"><img src="https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?w=320&h=320&fit=crop" alt="Pollo frito crujiente sobre tabla de madera oscura" width="128" height="128" loading="lazy" /></div>
           <div class="menu-info">
             <h3>Fried Chicken & Waffles</h3>
             <p>Pollo marinado y frito al estilo sureño sobre waffle belga con sirope de arce y mantequilla.</p>
@@ -1292,7 +1390,7 @@
           </div>
         </div>
         <div class="menu-card fade-in">
-          <div class="menu-emoji"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c-4.97 0-9 3.13-9 7s4.03 7 9 7 9-3.13 9-7-4.03-7-9-7z"/><path d="M3 10c0 3.87 4.03 7 9 7s9-3.13 9-7"/></svg></div>
+          <div class="menu-card-img"><img src="https://images.unsplash.com/photo-1580442151529-343f2f6e0e27?w=320&h=320&fit=crop" alt="Bol oscuro de kimchi al estilo fusión asiática" width="128" height="128" loading="lazy" /></div>
           <div class="menu-info">
             <h3>Kimchi Balls</h3>
             <p>Croquetas de kimchi crujientes por fuera, cremosas por dentro. Un fusión hit que repiten todos.</p>
@@ -1300,7 +1398,7 @@
           </div>
         </div>
         <div class="menu-card fade-in">
-          <div class="menu-emoji"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></div>
+          <div class="menu-card-img"><img src="https://images.unsplash.com/photo-1599974579688-8dbdd335c77f?w=320&h=320&fit=crop" alt="Tacos mexicanos con cilantro, cebolla y limón" width="128" height="128" loading="lazy" /></div>
           <div class="menu-info">
             <h3>Chilaquiles Veganos</h3>
             <p>Versión vegetal con jackfruit desmenuzado, salsa roja, aguacate y crema de anacardos. Sin compromiso en sabor.</p>
@@ -1314,7 +1412,7 @@
   <!-- ─── BEER ─── -->
   <section class="beer-section" id="cervezas">
     <div class="container">
-      <div class="beer-inner">
+      <div class="beer-inner stagger">
         <div class="beer-visual fade-in">
           <div class="beer-img-wrap">
             <canvas id="beer-canvas" aria-label="Servido de cerveza artesanal" role="img"></canvas>
@@ -1344,20 +1442,20 @@
   <!-- ─── STATS ─── -->
   <section class="stats-section">
     <div class="container">
-      <div class="stats-grid fade-in">
-        <div>
+      <div class="stats-grid stagger">
+        <div class="fade-in">
           <div class="stat-number" data-count="4.8" data-decimals="1">0</div>
           <div class="stat-label">Valoración en Google</div>
         </div>
-        <div>
+        <div class="fade-in">
           <div class="stat-number" data-count="2600" data-suffix="+" data-separator=".">0</div>
           <div class="stat-label">Opiniones verificadas</div>
         </div>
-        <div>
+        <div class="fade-in">
           <div class="stat-number" data-count="20" data-suffix="+">0</div>
           <div class="stat-label">Grifos artesanales</div>
         </div>
-        <div>
+        <div class="fade-in">
           <div class="stat-number" data-count="154" data-prefix="#">0</div>
           <div class="stat-label">De 20.000+ bares en Madrid</div>
         </div>
@@ -1368,7 +1466,7 @@
   <!-- ─── HOURS ─── -->
   <section class="hours-section" id="horario">
     <div class="container">
-      <div class="hours-inner">
+      <div class="hours-inner stagger">
         <div class="hours-content fade-in">
           <p class="section-label">Horario y ubicación</p>
           <h2>Encuéntranos en el <span class="accent">corazón de Malasaña</span></h2>
