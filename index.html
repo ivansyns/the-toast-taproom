@@ -249,8 +249,14 @@
       object-fit: cover;
       display: block;
       transform-origin: center center;
-      transform: scale(1);
+      transform: scale(1.3);
       will-change: transform;
+      animation: heroZoomOut 2.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+    }
+
+    @keyframes heroZoomOut {
+      from { transform: scale(1.3); }
+      to   { transform: scale(1); }
     }
 
     /* Gradient overlay — dark left, lighter right */
@@ -1590,16 +1596,14 @@
       document.querySelectorAll('.fade-in:not(.visible)').forEach(el => el.classList.add('visible'));
     }, 2000);
 
-    // ─── HERO SCROLL-DRIVEN ZOOM + TEXT REVEAL ───
+    // ─── HERO PIN + TEXT REVEAL ───
+    // The zoom itself is a CSS @keyframes on .hero-bg-img img (plays once
+    // on page load). This block only handles the pinned scroll container
+    // and the scroll-driven text reveals.
     (function initHeroScroll() {
-      const hero   = document.querySelector('.hero');
-      const bgImg  = document.getElementById('hero-bg');
-      if (!hero || !bgImg) return;
+      const hero = document.querySelector('.hero');
+      if (!hero) return;
 
-      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-      // Scroll-triggered reveal buckets. Each element fades opacity 0 → 1
-      // across the given [start, end] progress range. Simple linear fade.
       const revealBuckets = [
         { selector: '[data-reveal="taproom"]', start: 0.08, end: 0.22 },
         { selector: '[data-reveal="eyebrow"]', start: 0.28, end: 0.42 },
@@ -1622,40 +1626,8 @@
         }
       }
 
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce) return;
-
-      // ── Smooth scroll-driven zoom 1.00 → 1.15 ────────────────────
-      // Scroll drives `targetScale`. A rAF loop lerps `displayScale`
-      // toward it so the zoom glides instead of snapping per scroll event.
-      const SCALE_MIN = 1.00;
-      const SCALE_MAX = 1.30;
-      const LERP = 0.15;
-      const SETTLE = 0.0005;
-      let targetScale  = SCALE_MIN;
-      let displayScale = SCALE_MIN;
-      let rafId = 0;
-
-      function tick() {
-        const delta = targetScale - displayScale;
-        if (Math.abs(delta) < SETTLE) {
-          displayScale = targetScale;
-          bgImg.style.transform = `scale(${displayScale.toFixed(4)})`;
-          rafId = 0;
-          return;
-        }
-        displayScale += delta * LERP;
-        bgImg.style.transform = `scale(${displayScale.toFixed(4)})`;
-        rafId = requestAnimationFrame(tick);
-      }
-
-      function setProgressTarget(p) {
-        const clamped = p < 0 ? 0 : p > 1 ? 1 : p;
-        // Zoom completes at ~50% scroll progress — feels cinematic
-        // rather than dragging all the way to the unpin point.
-        const zoomP = clamped < 0.5 ? clamped * 2 : 1;
-        targetScale = SCALE_MIN + (SCALE_MAX - SCALE_MIN) * zoomP;
-        if (!rafId) rafId = requestAnimationFrame(tick);
-      }
 
       function setupScroll() {
         if (!window.gsap || !window.ScrollTrigger) {
@@ -1670,16 +1642,11 @@
           pin: true,
           pinSpacing: true,
           anticipatePin: 1,
-          scrub: true,       // direct scroll→progress; lerp handles smoothing
+          scrub: true,
           invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            const p = self.progress;
-            setProgressTarget(p);
-            updateReveals(p);
-          },
+          onUpdate: (self) => updateReveals(self.progress),
         });
 
-        // Paint initial (progress 0) state so nothing flashes visible
         updateReveals(0);
       }
       setupScroll();
