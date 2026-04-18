@@ -1830,14 +1830,41 @@
       preloadFrames();
       window.addEventListener('resize', resizeCanvas, { passive: true });
 
-      function drawByProgress(p) {
-        const idx = Math.min(
-          FRAME_COUNT - 1,
-          Math.round(p * (FRAME_COUNT - 1))
-        );
-        if (idx !== currentFrame && frames[idx]) {
-          requestAnimationFrame(() => drawFrame(idx));
+      // ── Smooth frame interpolation ───────────────────────────────
+      // Scroll updates `targetFrame`. A rAF loop lerps `displayFrame`
+      // toward it each tick, so the visible pour catches up smoothly
+      // instead of jumping frame-to-frame on every scroll event.
+      const LERP = 0.15;           // higher = snappier, lower = creamier
+      const SETTLE = 0.03;         // distance at which we stop the loop
+      let targetFrame  = 0;
+      let displayFrame = 0;
+      let lastDrawn    = -1;
+      let rafId        = 0;
+
+      function paint(i) {
+        if (i !== lastDrawn && frames[i]) {
+          drawFrame(i);
+          lastDrawn = i;
         }
+      }
+
+      function tick() {
+        const delta = targetFrame - displayFrame;
+        if (Math.abs(delta) < SETTLE) {
+          displayFrame = targetFrame;
+          paint(Math.round(displayFrame));
+          rafId = 0;
+          return;
+        }
+        displayFrame += delta * LERP;
+        paint(Math.round(displayFrame));
+        rafId = requestAnimationFrame(tick);
+      }
+
+      function setProgressTarget(p) {
+        const clamped = p < 0 ? 0 : p > 1 ? 1 : p;
+        targetFrame = clamped * (FRAME_COUNT - 1);
+        if (!rafId) rafId = requestAnimationFrame(tick);
       }
 
       function setupScroll() {
@@ -1846,8 +1873,9 @@
         }
         gsap.registerPlugin(ScrollTrigger);
 
-        // Desktop (>=901px): pin the section and scrub frames during the pin.
-        // Mobile (<=900px): no pin — scrub frames as the section crosses the viewport.
+        // Desktop (>=901px): pin the section and drive target frame.
+        // Mobile (<=900px): no pin — drive target as section crosses the viewport.
+        // scrub:true maps scroll 1:1 to progress; our lerp handles the smoothing.
         const mm = gsap.matchMedia();
 
         mm.add('(min-width: 901px)', () => {
@@ -1858,9 +1886,9 @@
             pin: true,
             pinSpacing: true,
             anticipatePin: 1,
-            scrub: 0.4,
+            scrub: true,
             invalidateOnRefresh: true,
-            onUpdate: (self) => drawByProgress(self.progress),
+            onUpdate: (self) => setProgressTarget(self.progress),
           });
           return () => st.kill();
         });
@@ -1870,9 +1898,9 @@
             trigger: section,
             start: 'top 80%',
             end:   'bottom 30%',
-            scrub: 0.4,
+            scrub: true,
             invalidateOnRefresh: true,
-            onUpdate: (self) => drawByProgress(self.progress),
+            onUpdate: (self) => setProgressTarget(self.progress),
           });
           return () => st.kill();
         });
