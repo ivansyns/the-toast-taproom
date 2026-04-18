@@ -249,15 +249,46 @@
       object-fit: cover;
       display: block;
       transform-origin: center center;
-      transform: scale(1.3);
+      transform: scale(1);
       will-change: transform;
-      animation: heroZoomOut 2.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+      /* Slow cinematic push-in on page load (scale 1 → 1.15 over 4.8s) */
+      animation: heroZoomIn 4.8s cubic-bezier(0.4, 0, 0.6, 1) 0s both;
     }
 
-    @keyframes heroZoomOut {
-      from { transform: scale(1.3); }
-      to   { transform: scale(1); }
+    @keyframes heroZoomIn {
+      from { transform: scale(1); }
+      to   { transform: scale(1.15); }
     }
+
+    /* Hero content cascade — each element fades up on page load, staggered */
+    @keyframes heroIntro {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero .hero-eyebrow,
+    .hero .word-the,
+    .hero .word-toast,
+    .hero .word-taproom,
+    .hero .hero-tagline,
+    .hero .hero-ctas,
+    .hero .hero-sub,
+    .hero .hero-tag {
+      opacity: 0;
+      transform: translateY(20px);
+      will-change: opacity, transform;
+      animation: heroIntro 1.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+
+    .hero .hero-eyebrow { animation-delay: 0.15s; }
+    .hero .word-the     { animation-delay: 0.40s; }
+    .hero .word-toast   { animation-delay: 0.65s; }
+    .hero .word-taproom { animation-delay: 0.90s; }
+    .hero .hero-tagline { animation-delay: 1.15s; }
+    .hero .hero-ctas    { animation-delay: 1.40s; }
+    .hero .hero-sub     { animation-delay: 1.65s; }
+    .hero .hero-tag:nth-of-type(1) { animation-delay: 1.55s; }
+    .hero .hero-tag:nth-of-type(2) { animation-delay: 1.80s; }
 
     /* Gradient overlay — dark left, lighter right */
     .hero-overlay {
@@ -1103,8 +1134,16 @@
         scroll-behavior: auto !important;
       }
       .fade-in { opacity: 1; transform: none; }
-      .hero-bg-img img { transform: none !important; }
+      .hero-bg-img img { transform: none !important; animation: none !important; }
       .hero-reveal { opacity: 1 !important; }
+      .hero .hero-eyebrow,
+      .hero .word-the, .hero .word-toast, .hero .word-taproom,
+      .hero .hero-tagline, .hero .hero-ctas,
+      .hero .hero-sub, .hero .hero-tag {
+        opacity: 1 !important;
+        transform: none !important;
+        animation: none !important;
+      }
     }
   </style>
 </head>
@@ -1596,35 +1635,12 @@
       document.querySelectorAll('.fade-in:not(.visible)').forEach(el => el.classList.add('visible'));
     }, 2000);
 
-    // ─── HERO PIN + TEXT REVEAL ───
-    // The zoom itself is a CSS @keyframes on .hero-bg-img img (plays once
-    // on page load). This block only handles the pinned scroll container
-    // and the scroll-driven text reveals.
+    // ─── HERO PIN ───
+    // Zoom and text cascade are pure CSS @keyframes on page load.
+    // This block only keeps the hero pinned while the user scrolls past.
     (function initHeroScroll() {
       const hero = document.querySelector('.hero');
       if (!hero) return;
-
-      const revealBuckets = [
-        { selector: '[data-reveal="taproom"]', start: 0.08, end: 0.22 },
-        { selector: '[data-reveal="eyebrow"]', start: 0.28, end: 0.42 },
-        { selector: '[data-reveal="tagline"]', start: 0.45, end: 0.58 },
-        { selector: '[data-reveal="tags"]',    start: 0.60, end: 0.73 },
-        { selector: '[data-reveal="bottom"]',  start: 0.76, end: 0.89 },
-      ].map(b => ({ ...b, els: Array.from(document.querySelectorAll(b.selector)) }));
-
-      function updateReveals(p) {
-        for (const b of revealBuckets) {
-          let t = (p - b.start) / (b.end - b.start);
-          if (t < 0) t = 0; else if (t > 1) t = 1;
-          const op = String(t);
-          for (const el of b.els) {
-            if (el._lastOp !== op) {
-              el.style.opacity = op;
-              el._lastOp = op;
-            }
-          }
-        }
-      }
 
       const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       if (reduce) return;
@@ -1644,10 +1660,7 @@
           anticipatePin: 1,
           scrub: true,
           invalidateOnRefresh: true,
-          onUpdate: (self) => updateReveals(self.progress),
         });
-
-        updateReveals(0);
       }
       setupScroll();
     })();
