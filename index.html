@@ -1635,36 +1635,6 @@
       document.querySelectorAll('.fade-in:not(.visible)').forEach(el => el.classList.add('visible'));
     }, 2000);
 
-    // ─── HERO PIN ───
-    // Zoom and text cascade are pure CSS @keyframes on page load.
-    // This block only keeps the hero pinned while the user scrolls past.
-    (function initHeroScroll() {
-      const hero = document.querySelector('.hero');
-      if (!hero) return;
-
-      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduce) return;
-
-      function setupScroll() {
-        if (!window.gsap || !window.ScrollTrigger) {
-          return setTimeout(setupScroll, 30);
-        }
-        gsap.registerPlugin(ScrollTrigger);
-
-        ScrollTrigger.create({
-          trigger: hero,
-          start: 'top top',
-          end:   '+=300%',
-          pin: true,
-          pinSpacing: true,
-          anticipatePin: 1,
-          scrub: true,
-          invalidateOnRefresh: true,
-        });
-      }
-      setupScroll();
-    })();
-
     // ─── BEER POUR SCROLL-DRIVEN FRAME ANIMATION ───
     (function initBeerScroll() {
       const FRAME_COUNT = 72;
