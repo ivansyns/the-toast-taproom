@@ -14,6 +14,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@700;800;900&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js" defer></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -34,7 +36,7 @@
       --radius-lg:  20px;
     }
 
-    html { scroll-behavior: smooth; overflow-x: hidden; }
+    html { scroll-behavior: smooth; overflow-x: clip; }
     html, body { max-width: 100%; }
 
     body {
@@ -42,7 +44,7 @@
       font-size: 17px;
       color: var(--text);
       background: var(--dark);
-      overflow-x: hidden;
+      overflow-x: clip;
       line-height: 1.6;
     }
 
@@ -229,19 +231,22 @@
       overflow: hidden;
     }
 
-    /* Full-bleed background image */
+    /* Full-bleed canvas background (scroll-driven frame animation) */
     .hero-bg-img {
       position: absolute;
       inset: 0;
       z-index: 0;
+      background: #080604;
     }
 
-    .hero-bg-img img {
+    .hero-bg-img canvas {
       width: 100%;
       height: 100%;
-      object-fit: cover;
       display: block;
+      opacity: 0;
+      transition: opacity 0.5s ease-out;
     }
+    .hero-bg-img canvas.ready { opacity: 1; }
 
     /* Gradient overlay — dark left, lighter right */
     .hero-overlay {
@@ -303,8 +308,6 @@
       -webkit-text-stroke: 2px var(--gold);
       color: transparent;
     }
-
-
 
     .hero-tagline {
       font-family: 'Outfit', sans-serif;
@@ -597,6 +600,15 @@
       position: relative;
     }
 
+    @media (min-width: 901px) {
+      .beer-section {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+      }
+      .beer-section > .container { width: 100%; }
+    }
+
     .beer-inner {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -612,13 +624,19 @@
       border-radius: 20px;
       overflow: hidden;
       height: 100%;
+      min-height: 560px;
+      background: #0a0705;
       box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+      position: relative;
     }
 
-    .beer-img-wrap img {
+    .beer-img-wrap canvas {
       width: 100%; height: 100%;
-      object-fit: cover;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.5s ease-out;
     }
+    .beer-img-wrap canvas.ready { opacity: 1; }
 
     .tap-count-badge {
       position: absolute;
@@ -960,44 +978,48 @@
     .stagger > *:nth-child(5) { transition-delay: 320ms; }
     .stagger > *:nth-child(6) { transition-delay: 400ms; }
 
-    /* ─── HERO ENTRANCE (CSS animation, no JS) ─── */
-    @keyframes heroFadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .hero-left {
+    /* ─── HERO REVEAL (scroll-driven, hidden on load) ─── */
+    .hero-reveal {
       opacity: 0;
-      animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-      will-change: transform, opacity;
-    }
-    .hero-right {
-      opacity: 0;
-      animation: heroFadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
-      will-change: transform, opacity;
+      will-change: opacity;
     }
 
     /* ─── RESPONSIVE ─── */
     @media (max-width: 900px) {
-      .hero { min-height: 100vh; }
+      /* Hero: center content on mobile so the frame composition and text
+         feel balanced rather than left-weighted. */
+      .hero {
+        min-height: 100vh;
+        align-items: center;
+        padding-top: clamp(96px, 12vh, 120px);
+        padding-bottom: clamp(48px, 6vh, 80px);
+      }
       .hero-inner {
-        grid-template-columns: 1fr auto;
-        gap: 20px;
-        align-items: flex-end;
+        grid-template-columns: 1fr;
+        gap: 28px;
+        align-items: center;
+        justify-items: center;
+        text-align: center;
         padding: 0 clamp(20px, 5vw, 40px);
       }
       .hero h1 { font-size: clamp(3.5rem, 12vw, 5.5rem); }
+      .hero-eyebrow { justify-content: center; }
+      .hero-ctas { justify-content: center; }
       .hero-right {
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 10px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
         padding-bottom: 0;
       }
-      .hero-tag { text-align: right; padding: 8px 14px; }
+      .hero-tag { text-align: center; padding: 8px 14px; }
       .hero-tag strong { font-size: 1.3rem; }
       .features-grid { grid-template-columns: 1fr; }
       .menu-grid { grid-template-columns: 1fr; }
       .beer-inner { grid-template-columns: 1fr; gap: 48px; }
-      .beer-visual { order: -1; max-width: 360px; margin: 0 auto; }
+      .beer-visual { order: -1; max-width: none; margin: 0; }
+      .beer-img-wrap { min-height: 0; height: 280px; }
       .hours-inner { grid-template-columns: 1fr; gap: 36px; }
       .hours-map { min-height: 280px; }
       .hours-map iframe { min-height: 280px; }
@@ -1008,18 +1030,13 @@
 
     @media (max-width: 600px) {
       body { font-size: 16px; }
-      .hero-inner { grid-template-columns: 1fr; }
       .hero h1 { font-size: clamp(3.2rem, 14vw, 4.5rem); }
       .hero-right {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: flex-start;
         gap: 8px;
-        margin-top: 12px;
       }
-      .hero-tag { text-align: left; padding: 7px 12px; }
+      .hero-tag { padding: 7px 12px; }
       .hero-tag strong { font-size: 1.1rem; }
-      .hero-ctas { flex-direction: column; width: 100%; }
+      .hero-ctas { flex-direction: column; width: 100%; max-width: 320px; }
       .hero-ctas .btn-gold,
       .hero-ctas .btn-outline { width: 100%; justify-content: center; }
       /* Stats: larger numbers, smaller labels on mobile */
@@ -1075,6 +1092,8 @@
         scroll-behavior: auto !important;
       }
       .fade-in { opacity: 1; transform: none; }
+      .hero-bg-img canvas { opacity: 1 !important; }
+      .hero-reveal { opacity: 1 !important; }
     }
   </style>
 </head>
@@ -1115,30 +1134,34 @@
 
   <!-- ─── HERO ─── -->
   <section class="hero">
-    <!-- Full-bleed background image -->
+    <!-- Full-bleed canvas background (scroll-driven dolly-in) -->
     <div class="hero-bg-img">
-      <img src="https://images.unsplash.com/photo-1514933651103-005eec06c04b?w=1600&h=1000&fit=crop&crop=center&q=80" alt="Interior del The Toast Taproom, barra con iluminación cálida" width="1600" height="1000" fetchpriority="high" />
+      <canvas id="hero-canvas" aria-hidden="true"></canvas>
     </div>
     <!-- Gradient overlay -->
     <div class="hero-overlay" aria-hidden="true"></div>
 
     <div class="hero-inner">
       <div class="hero-left">
-        <div class="hero-eyebrow">Malasaña, Madrid</div>
-        <h1>The<br><span class="outline">Toast</span><br>Taproom.</h1>
-        <p class="hero-tagline">Cerveza artesanal. Cocina fusión.</p>
-        <div class="hero-ctas">
+        <div class="hero-eyebrow hero-reveal" data-reveal="eyebrow">Malasaña, Madrid</div>
+        <h1>
+          <span class="word-the">The</span><br>
+          <span class="outline word-toast">Toast</span><br>
+          <span class="word-taproom hero-reveal" data-reveal="taproom">Taproom</span>
+        </h1>
+        <p class="hero-tagline hero-reveal" data-reveal="tagline">Cerveza artesanal. Cocina fusión.</p>
+        <div class="hero-ctas hero-reveal" data-reveal="bottom">
           <a href="https://wa.me/34915326791" target="_blank" class="btn-gold">Reservar mesa</a>
           <a href="#carta" class="btn-outline">Ver la carta</a>
         </div>
-        <span class="hero-sub">C/ San Vicente Ferrer 33, Madrid</span>
+        <span class="hero-sub hero-reveal" data-reveal="bottom">C/ San Vicente Ferrer 33, Madrid</span>
       </div>
       <div class="hero-right">
-        <div class="hero-tag">
+        <div class="hero-tag hero-reveal" data-reveal="tags">
           Google Reviews
           <strong><span class="gold">4.8</span> / 5</strong>
         </div>
-        <div class="hero-tag">
+        <div class="hero-tag hero-reveal" data-reveal="tags">
           Grifos artesanales
           <strong>20+</strong>
         </div>
@@ -1248,7 +1271,7 @@
       <div class="beer-inner">
         <div class="beer-visual fade-in">
           <div class="beer-img-wrap">
-            <img src="https://images.unsplash.com/photo-1535958636474-b021ee887b13?w=500&h=667&fit=crop&crop=center" alt="Vaso de cerveza artesanal sirviéndose de grifo" width="500" height="667" loading="lazy" />
+            <canvas id="beer-canvas" aria-label="Servido de cerveza artesanal" role="img"></canvas>
           </div>
           <div class="tap-count-badge">
             <span class="num">20+</span>
@@ -1427,10 +1450,23 @@
     window.addEventListener('resize', syncMapHeight, { passive: true });
 
     // ─── NAV SCROLL ───
+    // Nav stays transparent while the hero is visible (pinned or otherwise).
+    // Only gains its background once the hero section is scrolled past.
     const nav = document.getElementById('nav');
-    window.addEventListener('scroll', () => {
-      nav.classList.toggle('scrolled', window.scrollY > 60);
-    }, { passive: true });
+    const navHeroEl = document.querySelector('.hero');
+
+    function updateNavScrolled() {
+      // getBoundingClientRect works whether GSAP has the hero pinned (position:fixed)
+      // or released back to flow — in both cases rect.bottom reflects the visual
+      // bottom edge of the hero relative to the viewport.
+      const heroBottom = navHeroEl
+        ? navHeroEl.getBoundingClientRect().bottom
+        : -Infinity;
+      nav.classList.toggle('scrolled', heroBottom <= 80);
+    }
+    updateNavScrolled();
+    window.addEventListener('scroll', updateNavScrolled, { passive: true });
+    window.addEventListener('resize', updateNavScrolled, { passive: true });
 
     // ─── HAMBURGER ───
     const hamburger = document.getElementById('hamburger');
@@ -1548,6 +1584,301 @@
     setTimeout(() => {
       document.querySelectorAll('.fade-in:not(.visible)').forEach(el => el.classList.add('visible'));
     }, 2000);
+
+    // ─── HERO SCROLL-DRIVEN FRAME ANIMATION ───
+    (function initHeroScroll() {
+      const FRAME_COUNT = 121;
+      const FRAME_PATH = (i) => `assets/frames/frame_${String(i).padStart(4, '0')}.webp`;
+
+      const hero   = document.querySelector('.hero');
+      const canvas = document.getElementById('hero-canvas');
+      if (!hero || !canvas) return;
+
+      const ctx = canvas.getContext('2d', { alpha: false });
+      const frames = new Array(FRAME_COUNT);
+      let currentFrame = -1;
+      let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function resizeCanvas() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const rect = canvas.getBoundingClientRect();
+        const w = rect.width || window.innerWidth;
+        const h = rect.height || window.innerHeight;
+        canvas.width  = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        canvas.style.width  = w + 'px';
+        canvas.style.height = h + 'px';
+        if (currentFrame >= 0 && frames[currentFrame]) {
+          drawFrame(currentFrame, true);
+        }
+      }
+
+      function drawFrame(i, force) {
+        const img = frames[i];
+        if (!img) return;
+        const cw = canvas.width, ch = canvas.height;
+        ctx.fillStyle = '#080604';
+        ctx.fillRect(0, 0, cw, ch);
+        const iw = img.naturalWidth, ih = img.naturalHeight;
+        const scale = Math.max(cw / iw, ch / ih);
+        const dw = iw * scale, dh = ih * scale;
+        const dx = (cw - dw) / 2, dy = (ch - dh) / 2;
+        ctx.drawImage(img, dx, dy, dw, dh);
+        if (force !== true) currentFrame = i;
+      }
+
+      function loadImage(i) {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.decoding = 'async';
+          img.onload  = () => resolve(img);
+          img.onerror = () => resolve(null);
+          img.src = FRAME_PATH(i + 1);
+        });
+      }
+
+      // Reduced motion: static first frame, no pin, no scroll binding
+      if (reduce) {
+        (async () => {
+          const first = await loadImage(0);
+          if (first) {
+            frames[0] = first;
+            resizeCanvas();
+            drawFrame(0);
+            canvas.classList.add('ready');
+          }
+        })();
+        window.addEventListener('resize', resizeCanvas, { passive: true });
+        return;
+      }
+
+      // Preload all frames; first one blocks so we can paint immediately
+      async function preloadFrames() {
+        const first = await loadImage(0);
+        if (first) {
+          frames[0] = first;
+          resizeCanvas();
+          drawFrame(0);
+          canvas.classList.add('ready');
+        }
+        const BATCH = 12;
+        const indices = [];
+        for (let i = 1; i < FRAME_COUNT; i++) indices.push(i);
+        while (indices.length) {
+          const chunk = indices.splice(0, BATCH);
+          await Promise.all(chunk.map(async (i) => {
+            const img = await loadImage(i);
+            if (img) frames[i] = img;
+          }));
+        }
+        // Tell ScrollTrigger to recompute in case layout changed during load
+        if (window.ScrollTrigger) ScrollTrigger.refresh();
+      }
+      preloadFrames();
+      window.addEventListener('resize', resizeCanvas, { passive: true });
+
+      // Scroll-triggered reveal buckets. Each element fades opacity 0 → 1
+      // across the given [start, end] progress range. Simple linear fade.
+      const revealBuckets = [
+        { selector: '[data-reveal="taproom"]', start: 0.08, end: 0.22 },
+        { selector: '[data-reveal="eyebrow"]', start: 0.28, end: 0.42 },
+        { selector: '[data-reveal="tagline"]', start: 0.45, end: 0.58 },
+        { selector: '[data-reveal="tags"]',    start: 0.60, end: 0.73 },
+        { selector: '[data-reveal="bottom"]',  start: 0.76, end: 0.89 },
+      ].map(b => ({ ...b, els: Array.from(document.querySelectorAll(b.selector)) }));
+
+      function updateReveals(p) {
+        for (const b of revealBuckets) {
+          let t = (p - b.start) / (b.end - b.start);
+          if (t < 0) t = 0; else if (t > 1) t = 1;
+          const op = String(t);
+          for (const el of b.els) {
+            if (el._lastOp !== op) {
+              el.style.opacity = op;
+              el._lastOp = op;
+            }
+          }
+        }
+      }
+
+      function setupScroll() {
+        if (!window.gsap || !window.ScrollTrigger) {
+          return setTimeout(setupScroll, 30);
+        }
+        gsap.registerPlugin(ScrollTrigger);
+
+        ScrollTrigger.create({
+          trigger: hero,
+          start: 'top top',
+          end:   '+=300%',   // 3 extra viewports of scroll while pinned
+          pin: true,
+          pinSpacing: true,
+          anticipatePin: 1,
+          scrub: 0.4,
+          invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            const p = self.progress;
+            const idx = Math.min(
+              FRAME_COUNT - 1,
+              Math.round(p * (FRAME_COUNT - 1))
+            );
+            if (idx !== currentFrame && frames[idx]) {
+              requestAnimationFrame(() => drawFrame(idx));
+            }
+            updateReveals(p);
+          },
+        });
+
+        // Paint initial (progress 0) state so nothing flashes visible
+        updateReveals(0);
+      }
+      setupScroll();
+    })();
+
+    // ─── BEER POUR SCROLL-DRIVEN FRAME ANIMATION ───
+    (function initBeerScroll() {
+      const FRAME_COUNT = 72;
+      const FRAME_PATH = (i) => `assets/frames-beer/frame_${String(i).padStart(4, '0')}.webp`;
+
+      const section = document.querySelector('.beer-section');
+      const canvas  = document.getElementById('beer-canvas');
+      if (!section || !canvas) return;
+
+      const ctx = canvas.getContext('2d', { alpha: false });
+      const frames = new Array(FRAME_COUNT);
+      let currentFrame = -1;
+      let dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+      const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function resizeCanvas() {
+        dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const rect = canvas.getBoundingClientRect();
+        const w = rect.width, h = rect.height;
+        if (w === 0 || h === 0) return;
+        canvas.width  = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+        canvas.style.width  = w + 'px';
+        canvas.style.height = h + 'px';
+        if (currentFrame >= 0 && frames[currentFrame]) {
+          drawFrame(currentFrame, true);
+        }
+      }
+
+      function drawFrame(i, force) {
+        const img = frames[i];
+        if (!img) return;
+        const cw = canvas.width, ch = canvas.height;
+        ctx.fillStyle = '#0a0705';
+        ctx.fillRect(0, 0, cw, ch);
+        const iw = img.naturalWidth, ih = img.naturalHeight;
+        const scale = Math.max(cw / iw, ch / ih);
+        const dw = iw * scale, dh = ih * scale;
+        const dx = (cw - dw) / 2, dy = (ch - dh) / 2;
+        ctx.drawImage(img, dx, dy, dw, dh);
+        if (force !== true) currentFrame = i;
+      }
+
+      function loadImage(i) {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.decoding = 'async';
+          img.onload  = () => resolve(img);
+          img.onerror = () => resolve(null);
+          img.src = FRAME_PATH(i + 1);
+        });
+      }
+
+      // Reduced motion: static last frame (full beer)
+      if (reduce) {
+        (async () => {
+          const last = await loadImage(FRAME_COUNT - 1);
+          if (last) {
+            frames[FRAME_COUNT - 1] = last;
+            resizeCanvas();
+            drawFrame(FRAME_COUNT - 1);
+            canvas.classList.add('ready');
+          }
+        })();
+        window.addEventListener('resize', resizeCanvas, { passive: true });
+        return;
+      }
+
+      async function preloadFrames() {
+        // First frame first so the canvas can paint immediately
+        const first = await loadImage(0);
+        if (first) {
+          frames[0] = first;
+          resizeCanvas();
+          drawFrame(0);
+          canvas.classList.add('ready');
+        }
+        const BATCH = 12;
+        const indices = [];
+        for (let i = 1; i < FRAME_COUNT; i++) indices.push(i);
+        while (indices.length) {
+          const chunk = indices.splice(0, BATCH);
+          await Promise.all(chunk.map(async (i) => {
+            const img = await loadImage(i);
+            if (img) frames[i] = img;
+          }));
+        }
+        if (window.ScrollTrigger) ScrollTrigger.refresh();
+      }
+      preloadFrames();
+      window.addEventListener('resize', resizeCanvas, { passive: true });
+
+      function drawByProgress(p) {
+        const idx = Math.min(
+          FRAME_COUNT - 1,
+          Math.round(p * (FRAME_COUNT - 1))
+        );
+        if (idx !== currentFrame && frames[idx]) {
+          requestAnimationFrame(() => drawFrame(idx));
+        }
+      }
+
+      function setupScroll() {
+        if (!window.gsap || !window.ScrollTrigger) {
+          return setTimeout(setupScroll, 30);
+        }
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Desktop (>=901px): pin the section and scrub frames during the pin.
+        // Mobile (<=900px): no pin — scrub frames as the section crosses the viewport.
+        const mm = gsap.matchMedia();
+
+        mm.add('(min-width: 901px)', () => {
+          const st = ScrollTrigger.create({
+            trigger: section,
+            start: 'top top',
+            end:   '+=200%',
+            pin: true,
+            pinSpacing: true,
+            anticipatePin: 1,
+            scrub: 0.4,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => drawByProgress(self.progress),
+          });
+          return () => st.kill();
+        });
+
+        mm.add('(max-width: 900px)', () => {
+          const st = ScrollTrigger.create({
+            trigger: section,
+            start: 'top 80%',
+            end:   'bottom 30%',
+            scrub: 0.4,
+            invalidateOnRefresh: true,
+            onUpdate: (self) => drawByProgress(self.progress),
+          });
+          return () => st.kill();
+        });
+      }
+      setupScroll();
+    })();
   </script>
 </body>
 </html>
