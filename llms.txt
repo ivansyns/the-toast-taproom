@@ -15,7 +15,7 @@ The Toast Taproom es una cervecería artesanal y restaurante de brunch en el cor
 - Lunes: 18:00 – 00:00
 - Martes: 18:00 – 00:00
 - Miércoles: 18:00 – 01:00
-- Jueves: 18:00 – 01:00
+- Jueves: 18:00 – 01:30
 - Viernes: 12:00 – 02:30
 - Sábado: 10:00 – 02:30 (brunch desde las 10:00)
 - Domingo: 10:00 – 00:00 (brunch todo el día)

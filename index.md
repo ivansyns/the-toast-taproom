@@ -89,7 +89,7 @@ Encuéntranos en el corazón de Malasaña. Calle de San Vicente Ferrer, 33 — a
 | Lunes | 18:00 – 00:00 |
 | Martes | 18:00 – 00:00 |
 | Miércoles | 18:00 – 01:00 |
-| Jueves | 18:00 – 01:00 |
+| Jueves | 18:00 – 01:30 |
 | Viernes | 12:00 – 02:30 |
 | Sábado | 10:00 – 02:30 |
 | Domingo | 10:00 – 00:00 |
