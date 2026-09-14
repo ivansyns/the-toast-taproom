@@ -1,0 +1,15 @@
+# robots.txt — The Toast Taproom
+
+User-agent: *
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+Sitemap: https://the-toast-taproom.vercel.app/sitemap.xml

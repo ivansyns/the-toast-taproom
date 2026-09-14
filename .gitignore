@@ -3,3 +3,6 @@ transforms.trf
 *.mp4
 .DS_Store
 node_modules/
+
+# salida de la auditoría — no se publica
+_qa/
